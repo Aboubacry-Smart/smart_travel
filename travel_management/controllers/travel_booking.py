@@ -63,3 +63,5 @@ class TravelBooking(http.Controller):
             values['arrival_name'] = arrival_point.name
         
         return request.render('travel_management.travel_booking_template', values)
+
+    

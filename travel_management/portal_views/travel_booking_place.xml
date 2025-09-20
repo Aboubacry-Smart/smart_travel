@@ -1,0 +1,321 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="travel_booking_place" name="Travel Booking Place">
+        <t t-call="website.layout">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background: #f8f9fa;
+                    margin: 0;
+                    padding: 20px;
+                }
+
+                .bus-container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    border-radius: 20px;
+                    padding: 30px;
+                }
+
+                .bus-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                }
+
+                .bus-header h2 {
+                    color: #2563eb;
+                    margin: 0;
+                    font-size: 24px;
+                }
+
+                .bus-header p {
+                    color: #6b7280;
+                    margin: 5px 0 0 0;
+                }
+
+
+                /* Section chauffeur */
+                .driver-section {
+                    display: flex;
+                    justify-content: flex-start;
+                    margin-bottom: 15px;
+                    padding: 10px;
+                    background: #f3f4f6;
+                    border-radius: 10px;
+                }
+
+                .steering-wheel {
+                    width: 50px;
+                    height: 50px;
+                    background: #374151;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 20px;
+                    margin-right: 10px;
+                    position: relative;
+                }
+
+                .steering-wheel::before {
+                    content: "🚗";
+                    font-size: 16px;
+                }
+
+                .driver-seats {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                /* Layout des sièges */
+                .seat-layout {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .seat-row {
+                    display: flex;
+                    justify-content: center;
+                    gap: 10px;
+                }
+
+                .seat {
+                    width: 45px;
+                    height: 45px;
+                    border: 2px solid #ddd;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 14px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    position: relative;
+                }
+
+                /* États des sièges */
+                .seat.driver {
+                    background: linear-gradient(135deg,#78797b,#e9eff7);
+                    color: white;
+                    cursor: not-allowed;
+                    width: 100px;
+                    
+                    border-color:rgb(216, 219, 223);
+                }
+
+                .seat.driver::before {
+                    content: "👨‍✈️";
+                    font-size: 16px;
+                }
+
+                .seat.available {
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    border-color: #10b981;
+                }
+
+                .seat.available:hover {
+                    background: linear-gradient(135deg, #059669, #047857);
+                    transform: scale(1.05);
+                }
+
+                .seat.selected {
+                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                    color: white;
+                    border-color: #f59e0b;
+                    animation: pulse 2s infinite;
+                }
+
+                .seat.in_process {
+                    background: linear-gradient(135deg, #5d3d56, #55354b);
+                    color: white;
+                    border-color: #5d3d56;
+                    animation: pulse 2s infinite;
+                    cursor: not-allowed;
+                }
+
+                .seat.booked {
+                    background: linear-gradient(135deg, #ef4444, #dc2626);
+                    color: white;
+                    border-color: #ef4444;
+                    cursor: not-allowed;
+                }
+
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.03); }
+                }
+
+                /* Allée centrale */
+                .aisle {
+                    width: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #9ca3af;
+                    font-size: 12px;
+                }
+
+                .aisle::before {
+                    content: "┋";
+                    font-size: 20px;
+                }
+
+                /* Légende */
+                .legend {
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    margin-top: 30px;
+                    padding: 20px;
+                    background: #f9fafb;
+                    border-radius: 10px;
+                }
+
+                .legend-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .legend-color {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 4px;
+                    border: 1px solid #ddd;
+                }
+
+                .legend-color.driver { background: linear-gradient(135deg,#adb5c0,#adb5c0); }
+                .legend-color.available { background: linear-gradient(135deg, #10b981, #059669); }
+                .legend-color.selected { background: linear-gradient(135deg, #f59e0b, #d97706); }
+                .legend-color.in_process { background: linear-gradient(135deg, #5d3d56, #55354b); }
+                .legend-color.booked { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+                /* Responsive */
+                @media (max-width: 480px) {
+                    .bus-container {
+                        padding: 15px;
+                        margin: 10px;
+                    }
+                    
+                    .seat {
+                        width: 35px;
+                        height: 35px;
+                        font-size: 12px;
+                    }
+                    
+                    .legend {
+                        gap: 10px;
+                    }
+                }
+                .hide {
+                    background-color: #ffffff !important;
+                }
+            </style>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bus-container">
+                        <div class="bus-header">
+                            <h2> <t t-esc="route_name"/> </h2>
+                            <p> 
+                                <t t-esc="departure_point"/> → <t t-esc="arrival_point"/> 
+                                | Départ: <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(hour_start * 60, 60))"/> 
+                                | Arrivée: <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(hour_end * 60, 60))"/> 
+                            </p> 
+                        </div>
+
+                        <!-- Ligne 1: Chauffeur + 2 sièges passagers -->
+                        <div class="seat-row">
+                            <div class="seat driver" data-seat="D1"></div>
+                            <!-- <div class="seat hide" data-seat="D2"></div> -->
+                            <div class="aisle"></div>
+                            <div class="seat available" data-seat="1">1</div>
+                            <div class="seat booked" data-seat="2">2</div>
+                        </div>
+
+                        <!-- Ligne 2: 4 sièges passagers -->
+                        <div class="seat-row">
+                            <div class="seat available" data-seat="3">3</div>
+                            <div class="seat selected" data-seat="4">4</div>
+                            <div class="aisle"></div>
+                            <div class="seat available" data-seat="5">5</div>
+                            <div class="seat available" data-seat="6">6</div>
+                        </div>
+
+                        <!-- Ligne 3: 4 sièges passagers -->
+                        <div class="seat-row">
+                            <div class="seat available" data-seat="7">7</div>
+                            <div class="seat available" data-seat="8">8</div>
+                            <div class="aisle"></div>
+                            <div class="seat booked" data-seat="9">9</div>
+                            <div class="seat available" data-seat="10">10</div>
+                        </div>
+
+                        <!-- Ligne 4: 4 sièges passagers -->
+                        <div class="seat-row">
+                            <div class="seat available" data-seat="11">11</div>
+                            <div class="seat available" data-seat="12">12</div>
+                            <div class="aisle"></div>
+                            <div class="seat in_process" data-seat="13">13</div>
+                            <div class="seat available" data-seat="14">14</div>
+                        </div>
+
+                        <!-- Ligne 5: 4 sièges passagers -->
+                        <div class="seat-row">
+                            <div class="seat available" data-seat="15">15</div>
+                            <div class="seat available" data-seat="16">16</div>
+                            <div class="aisle"></div>
+                            <div class="seat available" data-seat="17">17</div>
+                            <div class="seat booked" data-seat="18">18</div>
+                        </div>
+
+                        <!-- Légende -->
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color available"></div>
+                                <span>Disponible</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color selected"></div>
+                                <span>Sélectionné</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color in_process"></div>
+                                <span>En cours</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color booked"></div>
+                                <span>Réservé</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Ajouter les événements de clic sur les sièges disponibles
+                    document.querySelectorAll('.seat.available').forEach(seat => {
+                        seat.addEventListener('click', function() {
+                            if (this.classList.contains('selected')) {
+                                this.classList.remove('selected');
+                                this.classList.add('available');
+                            } else {
+                                this.classList.remove('available');
+                                this.classList.add('selected');
+                            }
+                        });
+                    });
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

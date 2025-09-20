@@ -135,7 +135,7 @@
                                                 <t t-if="point.code"> (<t t-esc="point.code"/>)</t>
                                             </option>
                                         </t>
-                                    </select>
+                                    </select> 
                                 </div>
                                 
                                 <!-- Point d'arrivée -->
@@ -183,31 +183,34 @@
                     </div>
                     
                     <!-- Affichage de la route trouvée -->
-                    <div t-if="route_found" class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Resultat de la recherche</h5>
-                        </div>
-                        <div class="card-body">
+                    <div t-if="route_found" class="travel-booking-container mb-5">
+                        <h4 class="mb-3 text-primary display-6">Resultat de la recherche</h4>
+                        <div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <p><strong>Départ:</strong> <t t-esc="route_found.departure_point.name"/></p>
                                     <p><strong>Arrivée:</strong> <t t-esc="route_found.arrival_point.name"/></p>
-                                    <p><strong>Agence de bus:</strong> <t t-esc="route_found.bus_agency.name"/></p>
+                                    <p><strong>Prix:</strong> <t t-esc="route_found.price"/> <t t-esc="route_found.currency"/></p>
                                 </div>
                                 <div class="col-md-6">
                                     <p><strong>Heure de départ:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_start * 60, 60))"/></p>
                                     <p><strong>Heure d'arrivée:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_end * 60, 60))"/></p>
-                                    <p><strong>Durée:</strong> <t t-esc="route_found.duration"/></p>
-                                    <p><strong>Prix:</strong> <t t-esc="route_found.price"/> €</p>
+                                    <p><strong>Durée:</strong> <t t-esc="route_found.duration"/> H</p>
+                                    
                                 </div>
                             </div>
                             <div class="text-center mt-3">
-                                <button class="btn btn-primary">Réserver maintenant</button>
+                                <button class="btn btn-outline-primary" t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ')'">Réserver maintenant</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <script>
+                function redirect_to_booking_place(route_id) {
+                    window.location.href = '/my/travel/place?route_id=' + route_id;
+                }
+            </script>
         </t>
     </template>
 </odoo>

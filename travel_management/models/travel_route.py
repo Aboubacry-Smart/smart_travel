@@ -20,6 +20,8 @@ class TravelRoute(models.Model):
     duration = fields.Char(string="Duration", compute="_compute_duration", store=True)
     state = fields.Selection([('draft','Draft'),('confirm','Confirm'),('cancel','Cancel')],default='draft',string="Status",tracking=True)
     price = fields.Float(string='Price', required=True)
+    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.user.company_id.currency_id)
+    currency = fields.Char(related='currency_id.symbol', string='Currency')
     travels_ids = fields.One2many('travel.order', 'route_id', string='Travels')
 
     def action_move_confirm(self):
