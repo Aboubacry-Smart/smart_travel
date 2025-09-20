@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Bus Agency Tree View -->
+        <record id="bus_agency_tree_view" model="ir.ui.view">
+            <field name="name">bus.agency.list</field>
+            <field name="model">bus.agency</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="row_layout"/>
+                    <field name="total_row"/>
+                    <field name="maximum"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Bus Agency Form View -->
+        <record id="bus_agency_form_view" model="ir.ui.view">
+            <field name="name">bus.agency.form</field>
+            <field name="model">bus.agency</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="row_layout"/>
+                                <field name="total_row"/>
+                                <field name="maximum"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Bus Agency Action -->
+        <record id="bus_agency_action" model="ir.actions.act_window">
+            <field name="name">Bus Agencies</field>
+            <field name="res_model">bus.agency</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first bus agency!
+                </p>
+                <p>
+                    Bus agencies manage transportation services and can be associated with trip packages.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

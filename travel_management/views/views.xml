@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Main Menu -->
+        <menuitem id="smart_travel_menu"
+                  name="Smart Travel"
+                  web_icon="travel_management,static/description/bus.png"/>
+
+        <!-- Travel Management Submenu -->
+        <menuitem id="smart_travel_management_menu"
+                  name="Travel Management"
+                  parent="smart_travel_menu"
+                  sequence="20" />
+
+        <!-- Trip Management Submenu -->
+        <menuitem id="smart_travel_trip_menu"
+                  name="Trip Management"
+                  parent="smart_travel_menu"
+                  sequence="40" />
+
+        <!-- Configuration Submenu -->
+        <menuitem id="smart_travel_config_menu"
+                  name="Configuration"
+                  parent="smart_travel_menu"
+                  sequence="100" />
+
+        <!-- Travel Routes Menu -->
+        <menuitem id="smart_travel_route_menu" 
+                  name="Travel Routes" 
+                  parent="smart_travel_management_menu" 
+                  action="travel_route_action" 
+                  sequence="10"/>
+
+        <!-- Travel Points Menu -->
+        <menuitem id="smart_travel_point_menu" 
+                  name="Travel Points" 
+                  parent="smart_travel_management_menu" 
+                  action="travel_point_action" 
+                  sequence="20"/>
+
+        <!-- Trip Packages Menu -->
+        <menuitem id="smart_travel_trip_package_menu" 
+                  name="Trip Packages" 
+                  parent="smart_travel_trip_menu" 
+                  action="trip_package_action" 
+                  sequence="30"/>
+
+        <!-- Bus Agencies Menu -->
+        <menuitem id="smart_travel_bus_agency_menu" 
+                  name="Bus Agencies" 
+                  parent="smart_travel_config_menu" 
+                  action="bus_agency_action" 
+                  sequence="10"/>
+        
+    </data>
+</odoo>

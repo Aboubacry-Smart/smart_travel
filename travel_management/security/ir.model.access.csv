@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+travel_management.access_travel_point,access_travel_point,travel_management.model_travel_point,base.group_user,1,1,1,1
+travel_management.access_travel_route,access_travel_route,travel_management.model_travel_route,base.group_user,1,1,1,1
+travel_management.access_trip_package,access_trip_package,travel_management.model_trip_package,base.group_user,1,1,1,1
+travel_management.access_bus_agency,access_bus_agency,travel_management.model_bus_agency,base.group_user,1,1,1,1
+travel_management.access_travel_order,access_travel_order,travel_management.model_travel_order,base.group_user,1,1,1,1

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Trip Package Tree View -->
+        <record id="trip_package_tree_view" model="ir.ui.view">
+            <field name="name">trip.package.list</field>
+            <field name="model">trip.package</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="travel_route"/>
+                    <field name="driver_id"/>
+                    <field name="owner_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Trip Package Form View -->
+        <record id="trip_package_form_view" model="ir.ui.view">
+            <field name="name">trip.package.form</field>
+            <field name="model">trip.package</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="travel_route"/>
+                            </group>
+                            <group>
+                                <field name="driver_id"/>
+                                <field name="owner_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Trip Package Action -->
+        <record id="trip_package_action" model="ir.actions.act_window">
+            <field name="name">Trip Packages</field>
+            <field name="res_model">trip.package</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first trip package!
+                </p>
+                <p>
+                    Trip packages organize your travel services with routes, drivers, and ownership information.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

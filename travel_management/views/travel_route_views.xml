@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Travel Route Tree View -->
+        <record id="travel_route_tree_view" model="ir.ui.view">
+            <field name="name">travel.route.list</field>
+            <field name="model">travel.route</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="departure_point"/>
+                    <field name="arrival_point"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Travel Route Form View -->
+        <record id="travel_route_form_view" model="ir.ui.view">
+            <field name="name">travel.route.form</field>
+            <field name="model">travel.route</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_move_confirm"  string="Confirm"
+                            class="btn-primary" type="object"
+                            invisible="state not in ['draft']"
+                            />
+                    
+                        <button name="action_move_cancel"  string="Cancel Route"
+                                class="btn-primary" type="object"
+                                invisible="state not in ['confirm']"
+                                />
+                        <button name="action_move_draft"  string="Set To Draft"
+                                class="btn-primary" type="object"
+                                invisible="state not in ['cancel']"
+                            />
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <!-- Informations générales -->
+                        <group>
+                            <group>
+                            <h1>
+                                <field name="name" class="oe_title" invisible="departure_point == False and arrival_point == False" />
+                            </h1>
+                                <field name="bus_agency"/>
+                                <field name="driver_id"/>
+                                <field name="price"/>
+                            </group>
+                            <group>
+                                <field name="departure_point"/>
+                                <field name="arrival_point"/>
+                                <field name="hour_start"/>
+                                <field name="hour_end"/>
+                                <field name="duration"/>
+                            </group>
+                        </group>
+                        <group name="name" string="string">
+                            <field name="travels_ids"> 
+                                <list>
+                                    <field name="passenger_name"/>
+                                    <field name="passenger_phone"/>
+                                    <field name="passenger_sexe"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                    
+                </form>
+            </field>
+        </record>
+
+        <!-- Travel Route Action -->
+        <record id="travel_route_action" model="ir.actions.act_window">
+            <field name="name">Travel Routes</field>
+            <field name="res_model">travel.route</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first travel route!
+                </p>
+                <p>
+                    Travel routes define the path between departure and arrival points for your trips.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
