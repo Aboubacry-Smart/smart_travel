@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail', 'website'],
 
     # always loaded
     'data': [
@@ -29,6 +29,8 @@ Long description of module's purpose
         'views/bus_agency_views.xml',
         'views/views.xml',
         'views/templates.xml',
+        'portal_views/travel_menu.xml',
+        'portal_views/travel_booking.xml'
     ],
 }
 

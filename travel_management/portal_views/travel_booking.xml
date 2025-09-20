@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="travel_booking_template" name="Reservation">
+        <t t-call="website.layout">
+            
+            <!-- Style personnalisé -->
+            <style>
+                .travel-booking-container {
+                    max-width: 800px;
+                    margin: 40px auto;
+                    padding: 30px;
+                    background: #fff;
+                    border-radius: 16px;
+                    box-shadow: 0 5px 20px rgba(113, 75, 103, 0.1);
+                }
+                
+                .travel-input-group {
+                    margin-bottom: 15px;
+                }
+                
+                .travel-input-group select {
+                    width: 100%;
+                    padding: 15px;
+                    border: 2px solid #e1e5eb;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    background-color: #f8f9fa;
+                    appearance: none;
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                    background-repeat: no-repeat;
+                    background-position: right 15px center;
+                    background-size: 16px;
+                    transition: all 0.3s ease;
+                }
+                
+                .travel-input-group select:focus {
+                    outline: none;
+                    border-color: #714B67;
+                    box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.2);
+                    background-color: white;
+                }
+                
+                .travel-search-btn {
+                    width: 100%;
+                    padding: 20px;
+                    background: #714B67;
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                }
+                
+                .travel-search-btn:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 7px 20px rgba(113, 75, 103, 0.4);
+                    background: #5d3d56;
+                }
+                
+                .travel-search-btn:active {
+                    transform: translateY(0);
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 768px) {
+                    .travel-booking-container {
+                        padding: 20px;
+                        margin: 20px auto;
+                    }
+                    
+                }
+                
+                @media (max-width: 480px) {
+                    .travel-booking-container {
+                        padding: 15px;
+                        margin: 15px auto;
+                        border-radius: 12px;
+                    }
+                    
+                    .travel-logo {
+                        width: 100px;
+                        height: 100px;
+                    }
+                    
+                    .travel-logo i {
+                        font-size: 35px;
+                    }
+                    
+                    .travel-input-group select {
+                        padding: 12px;
+                    }
+                    
+                    .travel-search-btn {
+                        padding: 14px;
+                        font-size: 16px;
+                    }
+                }
+                
+                /* Animation */
+                @keyframes travelFadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                .travel-booking-container {
+                    animation: travelFadeIn 0.8s ease-out;
+                }
+            </style>
+            
+            <!-- Contenu principal avec Bootstrap -->
+            <div class="container">
+                <div class="travel-booking-container">
+                   <form method="get" action="/my/travel/search">
+                        <div class="container-fluid">
+                            <div class="row align-items-center justify-content-center">
+                                <!-- Point de départ -->
+                                <div class="col-md-5 travel-input-group">
+                                    <select name="departure_point" id="depart" required="required">
+                                        <option value="" selected="true" disabled="true">Sélectionnez un point de départ</option>
+                                        <t t-foreach="travel_points" t-as="point">
+                                            <option t-att-value="point.id" t-att-selected="point.id == departure_selected">
+                                                <t t-esc="point.name"/>
+                                                <t t-if="point.code"> (<t t-esc="point.code"/>)</t>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                                <!-- Point d'arrivée -->
+                                <div class="col-md-5 travel-input-group">
+                                    <select name="arrival_point" id="arrivee" required="required">
+                                        <option value="" selected="true" disabled="true">Sélectionnez un point d'arrivée</option>
+                                        <t t-foreach="travel_points" t-as="point">
+                                            <option t-att-value="point.id" t-att-selected="point.id == arrival_selected">
+                                                <t t-esc="point.name"/>
+                                                <t t-if="point.code"> (<t t-esc="point.code"/>)</t>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                                <!-- Bouton Rechercher -->
+                                <div class="col-md-2 travel-input-group">
+                                    <button type="submit" class="travel-search-btn">
+                                        <i class="fa fa-search"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+                <!-- Section pour afficher les messages d'alerte et résultats -->
+                <div class="container mt-4">
+                    <div t-if="request.params.get('error') == 'missing_points'" class="alert alert-warning">
+                        Veuillez sélectionner un point de départ et un point d'arrivée.
+                    </div>
+                    
+                    <div t-if="request.params.get('error') == 'same_points'" class="alert alert-warning">
+                        Le point de départ et le point d'arrivée doivent être différents.
+                    </div>
+                    
+                    <div t-if="request.params.get('error') == 'invalid_points'" class="alert alert-danger">
+                        Les points sélectionnés sont invalides.
+                    </div>
+                    
+                    <!-- Message si aucune route trouvée -->
+                    <div t-if="route_not_found" class="alert alert-info">
+                        <strong>Aucune route disponible!</strong><br/>
+                        Aucun trajet n'a été trouvé entre <t t-esc="departure_name"/> et <t t-esc="arrival_name"/>.
+                    </div>
+                    
+                    <!-- Affichage de la route trouvée -->
+                    <div t-if="route_found" class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Resultat de la recherche</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Départ:</strong> <t t-esc="route_found.departure_point.name"/></p>
+                                    <p><strong>Arrivée:</strong> <t t-esc="route_found.arrival_point.name"/></p>
+                                    <p><strong>Agence de bus:</strong> <t t-esc="route_found.bus_agency.name"/></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Heure de départ:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_start * 60, 60))"/></p>
+                                    <p><strong>Heure d'arrivée:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_end * 60, 60))"/></p>
+                                    <p><strong>Durée:</strong> <t t-esc="route_found.duration"/></p>
+                                    <p><strong>Prix:</strong> <t t-esc="route_found.price"/> €</p>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-primary">Réserver maintenant</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -23,7 +23,10 @@ class TravelRoute(models.Model):
     travels_ids = fields.One2many('travel.order', 'route_id', string='Travels')
 
     def action_move_confirm(self):
-        self.state ='confirm'
+        if self.price > 0 and self.hour_start < self.hour_end:
+            self.state ='confirm'
+        else:
+            raise ValidationError('Le prix doit etre superieur a 0 et l\'heure de depart doit etre inferieur a l\'heure de fin')
     
     def action_move_cancel(self):
         self.state ='cancel'

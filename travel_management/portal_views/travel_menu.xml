@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+		<record id="website_travel_search_menu" model="website.menu">
+			<field name="name">Travel Booking</field>
+			<field name="url">/my/travel</field>
+			<field name="parent_id" ref="website.main_menu"/>
+			<field name="sequence" type="int">90</field>
+		</record>
+	</data>
+
+</odoo>
