@@ -684,7 +684,7 @@
                         if (contactPhone) contactPhone.required = false;
                         if (contactEmail) contactEmail.required = false;
                         confirmBtn.disabled = true;
-                        confirmBtn.textContent = 'Sélectionnez des sièges pour continuer';
+                        confirmBtn.textContent = 'Confirmer votre reservation';
                     }
                 }
 

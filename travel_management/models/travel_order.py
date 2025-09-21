@@ -1,6 +1,8 @@
 # Suggestion pour votre modèle travel.order
 
 from odoo import fields, models
+import random
+import string
 
 class TravelOrder(models.Model):
     _name = 'travel.order'
@@ -15,14 +17,12 @@ class TravelOrder(models.Model):
     payment_method_id = fields.Many2one('payment.method', string='Payment Method')
     payment_proof = fields.Binary(string='Payment Proof')
     payment_proof_filename = fields.Char(string='Payment Proof Filename')
-    
-    # État amélioré avec 'paid'
+    code = fields.Char(string='Code', readonly=True, default=lambda self: ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)))
     state = fields.Selection([
         ('draft', 'Draft'), 
         ('confirm', 'Confirm'),
-        ('paid', 'Paid')  # Ajout de l'état 'paid'
+        ('expired', 'Expired')
     ], default='draft')
-    
-    # Champs optionnels supplémentaires pour une meilleure traçabilité
     payment_date = fields.Datetime(string='Payment Date', readonly=True)
     paid_by_user_id = fields.Many2one('res.users', string='Paid by', readonly=True)
+    
