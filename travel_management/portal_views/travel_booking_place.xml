@@ -416,7 +416,7 @@
                         </div>
 
                         <!-- Formulaire -->
-                        <form action="/bus/confirm/booking" method="post" id="booking-form">
+                        <form action="/my/travel/order" method="post" id="booking-form">
                             <div id="passenger-forms-container">
                                 <!-- Formulaires passagers générés dynamiquement -->
                             </div>
@@ -666,12 +666,23 @@
                     // Affichage de la section contact
                     var contactSection = document.getElementById('contact-section');
                     var confirmBtn = document.getElementById('confirm-btn');
+                    var contactPhone = document.querySelector('input[name="contact_phone"]');
+                    var contactEmail = document.querySelector('input[name="contact_email"]');
                     
                     if (seatCount > 0) {
+                        // Rendre la section visible et focusable
+                        contactSection.classList.remove('hide');
                         contactSection.style.display = 'block';
+                        // Exiger les champs seulement lorsqu'affichés
+                        if (contactPhone) contactPhone.required = true;
+                        if (contactEmail) contactEmail.required = true;
                         validateGenderConstraints(); // Valider après mise à jour
                     } else {
+                        // Cacher la section et retirer les contraintes required
+                        contactSection.classList.add('hide');
                         contactSection.style.display = 'none';
+                        if (contactPhone) contactPhone.required = false;
+                        if (contactEmail) contactEmail.required = false;
                         confirmBtn.disabled = true;
                         confirmBtn.textContent = 'Sélectionnez des sièges pour continuer';
                     }
@@ -728,7 +739,7 @@
                 window.validateGenderConstraints = validateGenderConstraints;
             });
                 ]]>
-            </script>
+            </script> 
         </t>
     </template>
 </odoo>

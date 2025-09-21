@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="travel_booking_order" name="Travel Booking Order">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-3 text-success">Réservation enregistrée</h3>
+                        <p class="text-muted">Vos informations de réservation ont été enregistrées avec succès.</p>
+
+                        <t t-if="orders">
+                            <h5 class="mt-4">Détail des passagers</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Commande</th>
+                                        <th>Passager</th>
+                                        <th>Téléphone</th>
+                                        <th>Route</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="orders" t-as="o">
+                                        <td><t t-esc="o.id"/></td>
+                                        <td><t t-esc="o.passenger_id.name"/></td>
+                                        <td><t t-esc="o.passenger_id.phone"/></td>
+                                        <td><t t-esc="o.route_id.display_name"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <div class="mt-4">
+                            <a class="btn btn-primary" href="/my">Aller à mon compte</a>
+                            <a class="btn btn-outline-secondary" href="/my/travel/search">Nouvelle recherche</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

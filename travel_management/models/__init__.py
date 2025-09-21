@@ -6,3 +6,4 @@ from . import travel_point
 from . import travel_route
 from . import bus_agency
 from . import travel_order
+from . import payment_method

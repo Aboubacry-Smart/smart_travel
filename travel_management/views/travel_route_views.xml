@@ -57,7 +57,7 @@
                                 <field name="duration"/>
                             </group>
                         </group>
-                        <group name="name" string="string">
+                        <group name="name" string="Reservations">
                             <field name="travels_ids"> 
                                 <list>
                                     <field name="passenger_name"/>

@@ -32,6 +32,7 @@ Long description of module's purpose
         'portal_views/travel_menu.xml',
         'portal_views/travel_booking.xml',
         'portal_views/travel_booking_place.xml',
+        'portal_views/travel_booking_order.xml',
     ],
 }
 
