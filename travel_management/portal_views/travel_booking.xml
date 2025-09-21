@@ -200,15 +200,23 @@
                                 </div>
                             </div>
                             <div class="text-center mt-3">
-                                <button class="btn btn-outline-primary" t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ')'">Réserver maintenant</button>
+                                <button class="btn btn-outline-primary"
+                                        t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ', ' + str(route_found.price) + ', \'' + str(route_found.currency) + '\', ' + ')'
+                                ">Réserver maintenant</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <script>
-                function redirect_to_booking_place(route_id) {
-                    window.location.href = '/my/travel/place?route_id=' + route_id;
+                function redirect_to_booking_place(route_id, price, currency) {
+                    var params = new URLSearchParams({
+                        route_id: route_id,
+                        price: price,
+                        currency: currency,
+                    });
+                    var url = '/my/travel/place?' + params.toString();
+                    window.location.href = url;
                 }
             </script>
         </t>

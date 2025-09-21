@@ -33,7 +33,6 @@
                     margin: 5px 0 0 0;
                 }
 
-
                 /* Section chauffeur */
                 .driver-section {
                     display: flex;
@@ -102,7 +101,6 @@
                     color: white;
                     cursor: not-allowed;
                     width: 100px;
-                    
                     border-color:rgb(216, 219, 223);
                 }
 
@@ -195,9 +193,99 @@
                 .legend-color.in_process { background: linear-gradient(135deg, #5d3d56, #55354b); }
                 .legend-color.booked { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
+                /* Formulaire de réservation */
+                .booking-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                    border: 1px solid #e5e7eb;
+                }
+
+                .booking-header {
+                    text-align: center;
+                    margin-bottom: 25px;
+                    padding-bottom: 15px;
+                    border-bottom: 2px solid #e5e7eb;
+                }
+
+                .selected-seats-section {
+                    background: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .seat-count-badge {
+                    background: #3b82f6;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .selected-seat-item {
+                    background: #f59e0b;
+                    color: white;
+                    padding: 4px 10px;
+                    border-radius: 15px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    margin: 2px;
+                    display: inline-block;
+                }
+
+                .passenger-form {
+                    background: #ffffff;
+                    border: 1px solid #d1d5db;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                }
+
+                .form-control, .form-select {
+                    width: 100%;
+                    padding: 10px 12px;
+                    border: 1px solid #d1d5db;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+
+                .btn-confirm {
+                    width: 100%;
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    color: white;
+                    border: none;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+
+                .btn-confirm:disabled {
+                    background: #9ca3af;
+                    cursor: not-allowed;
+                }
+
+                .gender-validation-alert {
+                    background: #fef2f2;
+                    border: 1px solid #fca5a5;
+                    color: #dc2626;
+                    padding: 10px;
+                    border-radius: 6px;
+                    margin-bottom: 15px;
+                    display: none;
+                }
+
                 /* Responsive */
                 @media (max-width: 480px) {
-                    .bus-container {
+                    .bus-container, .booking-section {
                         padding: 15px;
                         margin: 10px;
                     }
@@ -212,16 +300,18 @@
                         gap: 10px;
                     }
                 }
+
                 .hide {
-                    background-color: #ffffff !important;
+                    display: none !important;
                 }
             </style>
             
             <div class="row">
+                <!-- Partie gauche - Plan du bus -->
                 <div class="col-md-6">
                     <div class="bus-container">
                         <div class="bus-header">
-                            <h2> <t t-esc="route_name"/> </h2>
+                            <h2><t t-esc="route_name"/></h2>
                             <p> 
                                 <t t-esc="departure_point"/> → <t t-esc="arrival_point"/> 
                                 | Départ: <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(hour_start * 60, 60))"/> 
@@ -232,46 +322,45 @@
                         <!-- Ligne 1: Chauffeur + 2 sièges passagers -->
                         <div class="seat-row">
                             <div class="seat driver" data-seat="D1"></div>
-                            <!-- <div class="seat hide" data-seat="D2"></div> -->
                             <div class="aisle"></div>
-                            <div class="seat available" data-seat="1">1</div>
-                            <div class="seat booked" data-seat="2">2</div>
+                            <div class="seat available" data-seat="1" data-group="1">1</div>
+                            <div class="seat booked" data-seat="2" data-group="1" data-gender="male">2</div>
                         </div>
 
                         <!-- Ligne 2: 4 sièges passagers -->
                         <div class="seat-row">
-                            <div class="seat available" data-seat="3">3</div>
-                            <div class="seat selected" data-seat="4">4</div>
+                            <div class="seat available" data-seat="3" data-group="2">3</div>
+                            <div class="seat available" data-seat="4" data-group="2">4</div>
                             <div class="aisle"></div>
-                            <div class="seat available" data-seat="5">5</div>
-                            <div class="seat available" data-seat="6">6</div>
+                            <div class="seat available" data-seat="5" data-group="3">5</div>
+                            <div class="seat available" data-seat="6" data-group="3">6</div>
                         </div>
 
                         <!-- Ligne 3: 4 sièges passagers -->
                         <div class="seat-row">
-                            <div class="seat available" data-seat="7">7</div>
-                            <div class="seat available" data-seat="8">8</div>
+                            <div class="seat available" data-seat="7" data-group="4">7</div>
+                            <div class="seat available" data-seat="8" data-group="4">8</div>
                             <div class="aisle"></div>
-                            <div class="seat booked" data-seat="9">9</div>
-                            <div class="seat available" data-seat="10">10</div>
+                            <div class="seat booked" data-seat="9" data-group="5" data-gender="female">9</div>
+                            <div class="seat available" data-seat="10" data-group="5">10</div>
                         </div>
 
                         <!-- Ligne 4: 4 sièges passagers -->
                         <div class="seat-row">
-                            <div class="seat available" data-seat="11">11</div>
-                            <div class="seat available" data-seat="12">12</div>
+                            <div class="seat available" data-seat="11" data-group="6">11</div>
+                            <div class="seat available" data-seat="12" data-group="6">12</div>
                             <div class="aisle"></div>
-                            <div class="seat in_process" data-seat="13">13</div>
-                            <div class="seat available" data-seat="14">14</div>
+                            <div class="seat in_process" data-seat="13" data-group="7">13</div>
+                            <div class="seat available" data-seat="14" data-group="7">14</div>
                         </div>
 
                         <!-- Ligne 5: 4 sièges passagers -->
                         <div class="seat-row">
-                            <div class="seat available" data-seat="15">15</div>
-                            <div class="seat available" data-seat="16">16</div>
+                            <div class="seat available" data-seat="15" data-group="8">15</div>
+                            <div class="seat available" data-seat="16" data-group="8">16</div>
                             <div class="aisle"></div>
-                            <div class="seat available" data-seat="17">17</div>
-                            <div class="seat booked" data-seat="18">18</div>
+                            <div class="seat available" data-seat="17" data-group="9">17</div>
+                            <div class="seat booked" data-seat="18" data-group="9" data-gender="male">18</div>
                         </div>
 
                         <!-- Légende -->
@@ -295,26 +384,350 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Partie droite - Formulaire de réservation -->
                 <div class="col-md-6">
-                    
+                    <div class="booking-section">
+                        <div class="booking-header">
+                            <h3>Informations de Réservation</h3>
+                            <p><t t-esc="departure_point"/> → <t t-esc="arrival_point"/> | Prix: <t t-esc="price"/> <t t-esc="currency"/></p>
+                        </div>
+
+                        <!-- Section des sièges sélectionnés -->
+                        <div class="selected-seats-section">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-weight: bold;">Sièges sélectionnés</span>
+                                <span class="seat-count-badge" id="seat-count">0</span>
+                            </div>
+                            <div id="selected-seats-list">
+                                <div style="color: #6b7280; font-style: italic;">Aucun siège sélectionné</div>
+                            </div>
+                        </div>
+
+                        <!-- Section du total -->
+                        <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                            <p style="font-size: 24px; font-weight: bold; color: #059669; margin: 0;" id="total-amount">0 <t t-esc="currency"/></p>
+                            <small style="color: #059669;">Total à payer</small>
+                        </div>
+
+                        <!-- Alerte de validation de genre -->
+                        <div id="gender-validation-alert" class="gender-validation-alert" style="display: none;">
+                            <span id="gender-validation-message"></span>
+                        </div>
+
+                        <!-- Formulaire -->
+                        <form action="/bus/confirm/booking" method="post" id="booking-form">
+                            <div id="passenger-forms-container">
+                                <!-- Formulaires passagers générés dynamiquement -->
+                            </div>
+
+                            <!-- Section contact -->
+                            <div id="contact-section" class="hide">
+                                <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                                    <h6 style="color: #92400e; margin-bottom: 15px;">Informations de Contact</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Téléphone *</label>
+                                            <input type="tel" class="form-control" name="contact_phone" placeholder="+222 6XX XX XX XX" required="required"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Email *</label>
+                                            <input type="email" class="form-control" name="contact_email" placeholder="votre@email.com" required="required"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Champs cachés -->
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="selected_seats_input" name="selected_seats" value=""/>
+                            <input type="hidden" id="total_amount_input" name="total_amount" value="0"/>
+                            <input type="hidden" name="route_id" t-att-value="route_id"/>
+                            <input type="hidden" name="price_per_seat" t-att-value="price"/>
+
+                            <!-- Bouton de confirmation -->
+                            <button type="submit" class="btn-confirm" id="confirm-btn" disabled="disabled">
+                                Confirmer la Réservation
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
+            <!-- Valeurs injectées via QWeb pour usage JS -->
+            <span id="qweb-price" style="display:none"><t t-esc="price"/></span>
+            <span id="qweb-currency" style="display:none"><t t-esc="currency"/></span>
+
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Ajouter les événements de clic sur les sièges disponibles
-                    document.querySelectorAll('.seat.available').forEach(seat => {
-                        seat.addEventListener('click', function() {
-                            if (this.classList.contains('selected')) {
-                                this.classList.remove('selected');
-                                this.classList.add('available');
-                            } else {
-                                this.classList.remove('available');
-                                this.classList.add('selected');
-                            }
-                        });
+                <![CDATA[
+            document.addEventListener('DOMContentLoaded', function() {
+                // Récupération des valeurs rendues par QWeb
+                var PRICE_PER_SEAT = parseFloat((document.getElementById('qweb-price') || {}).textContent || '');
+                var CURRENCY = ((document.getElementById('qweb-currency') || {}).textContent || '').trim();
+                // Valeurs par défaut si absence
+                if (isNaN(PRICE_PER_SEAT)) { PRICE_PER_SEAT = 50; }
+                if (!CURRENCY) { CURRENCY = 'MRU'; }
+                // Override depuis les paramètres d'URL
+                try {
+                    var params = new URLSearchParams(window.location.search);
+                    var p = parseFloat(params.get('price'));
+                    if (!isNaN(p)) { PRICE_PER_SEAT = p; }
+                    var curr = params.get('currency') || params.get('devise');
+                    if (curr) { CURRENCY = curr; }
+                } catch (e) { /* ignore */ }
+                
+                // Définition des groupes de sièges adjacents
+                var SEAT_GROUPS = {
+                    1: [1, 2],
+                    2: [3, 4],
+                    3: [5, 6],
+                    4: [7, 8],
+                    5: [9, 10],
+                    6: [11, 12],
+                    7: [13, 14],
+                    8: [15, 16],
+                    9: [17, 18]
+                };
+
+                // Gestion des clics sur les sièges
+                document.querySelectorAll('.seat.available').forEach(function(seat) {
+                    seat.addEventListener('click', function() {
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            this.classList.add('available');
+                        } else {
+                            this.classList.remove('available');
+                            this.classList.add('selected');
+                        }
+                        updateBookingDetails();
                     });
                 });
+
+                // Obtenir le groupe d'un siège
+                function getSeatGroup(seatNumber) {
+                    seatNumber = parseInt(seatNumber);
+                    for (var groupId in SEAT_GROUPS) {
+                        if (SEAT_GROUPS[groupId].includes(seatNumber)) {
+                            return SEAT_GROUPS[groupId];
+                        }
+                    }
+                    return null;
+                }
+
+                // Obtenir le genre d'un siège déjà réservé
+                function getBookedGenderForSeat(seatNumber) {
+                    var bookedSeat = document.querySelector('.seat.booked[data-seat="' + seatNumber + '"]');
+                    return bookedSeat ? bookedSeat.getAttribute('data-gender') : null;
+                }
+
+                // Obtenir le genre sélectionné dans le formulaire
+                function getFormGenderForSeat(seatNumber) {
+                    var genderSelect = document.querySelector('select[name="passenger_' + seatNumber + '_gender"]');
+                    return genderSelect ? genderSelect.value : null;
+                }
+
+                // Validation des contraintes de genre
+                function validateGenderConstraints() {
+                    var selectedSeats = document.querySelectorAll('.seat.selected');
+                    var alertDiv = document.getElementById('gender-validation-alert');
+                    var messageSpan = document.getElementById('gender-validation-message');
+                    
+                    if (selectedSeats.length === 0) {
+                        alertDiv.style.display = 'none';
+                        enableConfirmButton();
+                        return true;
+                    }
+
+                    // Vérifier d'abord que tous les genres sont sélectionnés
+                    var allGendersSelected = true;
+                    var missingGenders = [];
+                    
+                    selectedSeats.forEach(function(seat) {
+                        var seatNumber = seat.getAttribute('data-seat');
+                        var gender = getFormGenderForSeat(seatNumber);
+                        
+                        if (!gender) {
+                            allGendersSelected = false;
+                            missingGenders.push(seatNumber);
+                        }
+                    });
+
+                    if (!allGendersSelected) {
+                        showGenderValidationError('Veuillez sélectionner le genre pour les sièges: ' + missingGenders.join(', '));
+                        return false;
+                    }
+
+                    // Vérifier conflits entre sièges sélectionnés d'un même groupe
+                    for (var i = 0; i < selectedSeats.length; i++) {
+                        var seatNumberA = selectedSeats[i].getAttribute('data-seat');
+                        var groupA = getSeatGroup(seatNumberA);
+                        if (!groupA) continue;
+
+                        for (var j = 0; j < groupA.length; j++) {
+                            var seatNumberB = String(groupA[j]);
+                            if (seatNumberB === seatNumberA) continue;
+                            var bSelected = document.querySelector('.seat.selected[data-seat="' + seatNumberB + '"]');
+                            if (bSelected) {
+                                var genderA = getFormGenderForSeat(seatNumberA);
+                                var genderB = getFormGenderForSeat(seatNumberB);
+                                if (genderA && genderB && genderA !== genderB) {
+                                    showGenderValidationError('Les sièges ' + seatNumberA + ' et ' + seatNumberB + ' ne peuvent pas être adjacents avec des genres opposés');
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+
+                    // Vérifier les conflits avec les sièges déjà réservés
+                    for (var i = 0; i < selectedSeats.length; i++) {
+                        var seatNumber = selectedSeats[i].getAttribute('data-seat');
+                        var group = getSeatGroup(seatNumber);
+                        
+                        if (!group) continue;
+
+                        // Vérifier les sièges adjacents déjà réservés
+                        for (var j = 0; j < group.length; j++) {
+                            var adjacentSeat = group[j];
+                            
+                            if (adjacentSeat != seatNumber) {
+                                var adjacentGender = getBookedGenderForSeat(adjacentSeat);
+                                
+                                if (adjacentGender) {
+                                    var selectedGender = getFormGenderForSeat(seatNumber);
+                                    
+                                    if (selectedGender && selectedGender !== adjacentGender) {
+                                        showGenderValidationError('Le siège ' + seatNumber + ' (' + (selectedGender === 'male' ? 'Homme' : 'Femme') + 
+                                                                ') ne peut pas être à côté du siège ' + adjacentSeat + ' (' + (adjacentGender === 'male' ? 'Homme' : 'Femme') + ')');
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Si tout est OK
+                    alertDiv.style.display = 'none';
+                    enableConfirmButton();
+                    return true;
+                }
+
+                function showGenderValidationError(message) {
+                    var alertDiv = document.getElementById('gender-validation-alert');
+                    var messageSpan = document.getElementById('gender-validation-message');
+                    var confirmBtn = document.getElementById('confirm-btn');
+                    
+                    if (alertDiv && messageSpan && confirmBtn) {
+                        messageSpan.textContent = message;
+                        alertDiv.style.display = 'block';
+                        confirmBtn.disabled = true;
+                    }
+                }
+
+                function enableConfirmButton() {
+                    var confirmBtn = document.getElementById('confirm-btn');
+                    if (confirmBtn) {
+                        confirmBtn.disabled = false;
+                    }
+                }
+
+                function updateBookingDetails() {
+                    var selectedSeats = document.querySelectorAll('.seat.selected');
+                    var seatCount = selectedSeats.length;
+                    var totalAmount = seatCount * PRICE_PER_SEAT;
+
+                    // Mise à jour du compteur
+                    document.getElementById('seat-count').textContent = seatCount;
+                    
+                    // Mise à jour de la liste des sièges
+                    var seatsList = document.getElementById('selected-seats-list');
+                    if (seatCount === 0) {
+                        seatsList.innerHTML = '<div style="color: #6b7280; font-style: italic;">Aucun siège sélectionné</div>';
+                    } else {
+                        var seatsHTML = '';
+                        var selectedSeatNumbers = [];
+                        
+                        selectedSeats.forEach(function(seat) {
+                            var seatNumber = seat.getAttribute('data-seat');
+                            selectedSeatNumbers.push(seatNumber);
+                            seatsHTML += '<div class="selected-seat-item">Siège ' + seatNumber + '</div>';
+                        });
+                        
+                        seatsList.innerHTML = seatsHTML;
+                        document.getElementById('selected_seats_input').value = selectedSeatNumbers.join(',');
+                    }
+
+                    // Mise à jour du montant total
+                    document.getElementById('total-amount').textContent = totalAmount + ' ' + CURRENCY;
+                    document.getElementById('total_amount_input').value = totalAmount;
+
+                    // Mise à jour des formulaires passagers
+                    updatePassengerForms(selectedSeats);
+
+                    // Affichage de la section contact
+                    var contactSection = document.getElementById('contact-section');
+                    var confirmBtn = document.getElementById('confirm-btn');
+                    
+                    if (seatCount > 0) {
+                        contactSection.style.display = 'block';
+                        validateGenderConstraints(); // Valider après mise à jour
+                    } else {
+                        contactSection.style.display = 'none';
+                        confirmBtn.disabled = true;
+                        confirmBtn.textContent = 'Sélectionnez des sièges pour continuer';
+                    }
+                }
+
+                function updatePassengerForms(selectedSeats) {
+                    var container = document.getElementById('passenger-forms-container');
+                    container.innerHTML = '';
+
+                    selectedSeats.forEach(function(seat, index) {
+                        var seatNumber = seat.getAttribute('data-seat');
+                        var formHTML = 
+                            '<div class="passenger-form">' +
+                                '<h6 style="color: #374151; margin-bottom: 15px; font-weight: bold;">' +
+                                    'Passager ' + (index + 1) + ' ' +
+                                    '<span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px;">Siège ' + seatNumber + '</span>' +
+                                '</h6>' +
+                                '<div class="row">' +
+                                    '<div class="col-md-6">' +
+                                        '<label>Nom complet *</label>' +
+                                        '<input type="text" class="form-control" name="passenger_' + seatNumber + '_name" placeholder="Prénom et nom" required="required"/>' +
+                                    '</div>' +
+                                    '<div class="col-md-3">' +
+                                        '<label>Téléphone *</label>' +
+                                        '<input type="tel" class="form-control" name="passenger_' + seatNumber + '_phone" placeholder="0XXXXXXXX" required="required"/>' +
+                                    '</div>' +
+                                    '<div class="col-md-3">' +
+                                        '<label>Sexe *</label>' +
+                                        '<select class="form-select gender-select" name="passenger_' + seatNumber + '_gender" data-seat="' + seatNumber + '" required="required" onchange="validateGenderConstraints()">' +
+                                            '<option value="" disabled selected>Choisir</option>' +
+                                            '<option value="male">Homme</option>' +
+                                            '<option value="female">Femme</option>' +
+                                        '</select>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                        
+                        container.innerHTML += formHTML;
+                    });
+                }
+
+                // Validation avant soumission du formulaire
+                document.getElementById('booking-form').addEventListener('submit', function(e) {
+                    if (!validateGenderConstraints()) {
+                        e.preventDefault();
+                        alert('Veuillez corriger les erreurs de validation avant de soumettre.');
+                    }
+                });
+
+                // Initialisation
+                updateBookingDetails();
+                
+                // Exposer la fonction globalement pour les événements inline
+                window.validateGenderConstraints = validateGenderConstraints;
+            });
+                ]]>
             </script>
         </t>
     </template>

@@ -26,6 +26,8 @@ class TravelController(http.Controller):
             'route': route,
             'route_id': route.id,
             'route_name': route.name,
+            'price': route.price,
+            'currency': route.currency,
             'departure_point': route.departure_point.name if route.departure_point else "",
             'arrival_point': route.arrival_point.name if route.arrival_point else "",
             'hour_start': route.hour_start,
