@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <!-- Inherit the payment.payment_method_form view -->
+        <record id="view_payment_method_form_inherit_qr_code" model="ir.ui.view">
+            <field name="name">payment.payment_method_form.inherit.qr_code</field>
+            <field name="model">payment.method</field>
+            <field name="inherit_id" ref="payment.payment_method_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='supported_currency_ids']" position="after">
+                    <field name="qr_code" widget="image"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

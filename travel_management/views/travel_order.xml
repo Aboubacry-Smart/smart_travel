@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- List (list) view for travel.order -->
+    <record id="view_travel_order_list" model="ir.ui.view">
+        <field name="name">travel.order.list</field>
+        <field name="model">travel.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="route_id"/>
+                <field name="passenger_id"/>
+                <field name="passenger_name"/>
+                <field name="passenger_phone"/>
+                <field name="passenger_sexe"/>
+                <field name="place"/>
+                <field name="payment_method_id"/>
+                <field name="payment_proof_filename"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view for travel.order -->
+    <record id="view_travel_order_form" model="ir.ui.view">
+        <field name="name">travel.order.form</field>
+        <field name="model">travel.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="route_id"/>
+                            <field name="passenger_id"/>
+                            <field name="place"/>
+                        </group>                        
+                        <group>
+                            <field name="payment_method_id"/>
+                            <field name="payment_proof" widget="image"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open travel.order views -->
+    <record id="action_travel_order" model="ir.actions.act_window">
+        <field name="name">Travel Orders</field>
+        <field name="res_model">travel.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

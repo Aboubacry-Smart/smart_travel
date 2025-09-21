@@ -39,12 +39,19 @@
                   action="travel_point_action" 
                   sequence="20"/>
 
+        <!-- Travel Reservation Menu -->
+        <menuitem id="smart_travel_reservation_menu"
+                  name="Travel Reservation"
+                  parent="smart_travel_management_menu"
+                  action="action_travel_order"
+                  sequence="30"/>
+
         <!-- Trip Packages Menu -->
         <menuitem id="smart_travel_trip_package_menu" 
                   name="Trip Packages" 
                   parent="smart_travel_trip_menu" 
                   action="trip_package_action" 
-                  sequence="30"/>
+                  sequence="10"/>
 
         <!-- Bus Agencies Menu -->
         <menuitem id="smart_travel_bus_agency_menu" 
