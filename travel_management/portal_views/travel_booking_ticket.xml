@@ -29,16 +29,15 @@
 
                                 <!-- Statut -->
                                 <div class="mb-4 text-center">
-                                    <span class="text-muted d-block">Statut</span>
                                     <div class="mt-1">
                                         <t t-if="status == 'draft'">
-                                            <span class="badge bg-warning text-dark px-3 py-2">⏳ En attente</span>
+                                            <span class="badge bg-warning text-dark px-3 py-2">En attente</span>
                                         </t>
                                         <t t-if="status == 'confirm'">
-                                            <span class="badge bg-success px-3 py-2">✅ Confirmé</span>
+                                            <span class="badge bg-success px-3 py-2">Confirmé</span>
                                         </t>
                                         <t t-if="status == 'expired'">
-                                            <span class="badge bg-danger px-3 py-2">⛔ Expiré</span>
+                                            <span class="badge bg-danger px-3 py-2">Expiré</span>
                                         </t>
                                     </div>
                                 </div>

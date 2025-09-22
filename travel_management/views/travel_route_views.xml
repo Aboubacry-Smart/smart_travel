@@ -63,6 +63,8 @@
                                     <field name="passenger_name"/>
                                     <field name="passenger_phone"/>
                                     <field name="passenger_sexe"/>
+                                    <field name="place"/>
+                                    <field name="date"/>
                                     <field name="state"/>
                                 </list>
                             </field>

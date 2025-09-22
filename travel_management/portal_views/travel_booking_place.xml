@@ -426,6 +426,15 @@
                     margin-bottom: 25px;
                 }
 
+                /* Section date de voyage: centrée + marge bas */
+                .date-section {
+                    margin-bottom: 25px;
+                    text-align: center;
+                }
+                .date-section .row {
+                    justify-content: center;
+                }
+
                 .contact-section h6 {
                     color: #92400e;
                     margin: 0 0 20px 0;
@@ -656,17 +665,11 @@
                                         <!-- Formulaires passagers générés dynamiquement -->
                                     </div>
 
-                                    <!-- Section contact -->
-                                    <div id="contact-section" class="contact-section hide">
-                                        <h6>Informations de Contact</h6>
+                                    <div class="mb-3 px-4">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Téléphone *</label>
-                                                <input type="tel" class="form-control" name="contact_phone" placeholder="+222 6XX XX XX XX" required="required"/>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Email *</label>
-                                                <input type="email" class="form-control" name="contact_email" placeholder="votre@email.com" required="required"/>
+                                            <label>DATE DE VOYAGE *</label>
+                                            <div class="col-md-12">
+                                                <input type="date" class="form-control" name="date" placeholder="Date de voyage" required="required"/>
                                             </div>
                                         </div>
                                     </div>
@@ -872,7 +875,7 @@
 
                     // Mise à jour du compteur
                     document.getElementById('seat-count').textContent = seatCount;
-                    
+
                     // Mise à jour de la liste des sièges
                     var seatsList = document.getElementById('selected-seats-list');
                     if (seatCount === 0) {
@@ -880,13 +883,13 @@
                     } else {
                         var seatsHTML = '';
                         var selectedSeatNumbers = [];
-                        
+
                         selectedSeats.forEach(function(seat) {
                             var seatNumber = seat.getAttribute('data-seat');
                             selectedSeatNumbers.push(seatNumber);
                             seatsHTML += '<div class="selected-seat-item">Siège ' + seatNumber + '</div>';
                         });
-                        
+
                         seatsList.innerHTML = seatsHTML;
                         document.getElementById('selected_seats_input').value = selectedSeatNumbers.join(',');
                     }
@@ -898,30 +901,31 @@
                     // Mise à jour des formulaires passagers
                     updatePassengerForms(selectedSeats);
 
-                    // Affichage de la section contact
-                    var contactSection = document.getElementById('contact-section');
+                    // Affichage de la section date de voyage (rendu optionnel)
+                    var dateSection = document.getElementById('date-section');
                     var confirmBtn = document.getElementById('confirm-btn');
-                    var contactPhone = document.querySelector('input[name="contact_phone"]');
-                    var contactEmail = document.querySelector('input[name="contact_email"]');
-                    
+                    var dateInput = document.querySelector('input[name="date"]');
+
                     if (seatCount > 0) {
-                        // Rendre la section visible et focusable
-                        contactSection.classList.remove('hide');
-                        contactSection.style.display = 'block';
-                        // Exiger les champs seulement lorsqu'affichés
-                        if (contactPhone) contactPhone.required = true;
-                        if (contactEmail) contactEmail.required = true;
-                        validateGenderConstraints(); // Valider après mise à jour
+                        if (dateSection) {
+                            dateSection.classList.remove('hide');
+                            dateSection.style.display = 'block';
+                        }
+                        if (dateInput) dateInput.required = true;
+                        validateGenderConstraints();
                     } else {
-                        // Cacher la section et retirer les contraintes required
-                        contactSection.classList.add('hide');
-                        contactSection.style.display = 'none';
-                        if (contactPhone) contactPhone.required = false;
-                        if (contactEmail) contactEmail.required = false;
-                        confirmBtn.disabled = true;
-                        confirmBtn.textContent = 'Confirmer votre reservation';
+                        if (dateSection) {
+                            dateSection.classList.add('hide');
+                            dateSection.style.display = 'none';
+                        }
+                        if (dateInput) dateInput.required = false;
+                        if (confirmBtn) {
+                            confirmBtn.disabled = true;
+                            confirmBtn.textContent = 'Confirmer votre réservation';
+                        }
                     }
                 }
+
 
                 function updatePassengerForms(selectedSeats) {
                     var container = document.getElementById('passenger-forms-container');

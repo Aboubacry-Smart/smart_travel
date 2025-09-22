@@ -1,36 +1,41 @@
 from odoo import http
 from odoo.http import request
-import base64
+from datetime import datetime
+import logging
 
 
 class TravelBookingOrderController(http.Controller):
     @http.route('/my/travel/order', type='http', auth='user', website=True, methods=['GET', 'POST'])
     def travel_order(self, **post):
-        # Handle form submission (create orders) then redirect to confirmation
         if request.httprequest.method == 'POST':
             route_id = int((post.get('route_id') or 0))
             selected_seats = (post.get('selected_seats') or '').split(',') if post.get('selected_seats') else []
+            
+            # Récupérer une date envoyée depuis le formulaire
+            # Si rien n'est envoyé, on prend la date actuelle
+            date_str = post.get('date')
+            if date_str:
+                try:
+                    # Parser uniquement la date envoyée
+                    order_date = datetime.strptime(date_str, "%Y-%m-%d")
+                except Exception:
+                    _logger = logging.getLogger(__name__)
+                    _logger.warning(f"Format de date invalide reçu : {date_str}")
+                    order_date = datetime.now()
+            else:
+                order_date = datetime.now()
 
             created_order_ids = []
+            Partner = request.env['res.partner'].sudo()
             for seat in [s for s in selected_seats if s]:
                 name = (post.get(f'passenger_{seat}_name') or '').strip()
                 phone = (post.get(f'passenger_{seat}_phone') or '').strip()
                 gender = (post.get(f'passenger_{seat}_gender') or '').strip()
-                
-                # Le numéro de place EST le numéro de siège lui-même
                 place = seat
-                
-                # Debug - pour voir ce qui est reçu (à enlever en production)
-                import logging
-                _logger = logging.getLogger(__name__)
-                _logger.info(f"Seat: {seat}, Place utilisée: {place}, Name: {name}, Phone: {phone}")
 
-                # Find or create passenger partner
-                Partner = request.env['res.partner'].sudo()
                 partner = Partner.search([('name', '=', name), ('phone', '=', phone)], limit=1)
                 if not partner:
                     vals = {'name': name, 'phone': phone}
-                    # Set gender if field exists on res.partner
                     if 'sexe' in Partner._fields and gender:
                         vals['sexe'] = gender
                     partner = Partner.create(vals)
@@ -39,13 +44,13 @@ class TravelBookingOrderController(http.Controller):
                     'route_id': route_id,
                     'passenger_id': partner.id,
                     'place': place,
+                    'date': order_date,   # ✅ Ajout du champ date
                 }
                 order = request.env['travel.order'].sudo().create(order_vals)
                 created_order_ids.append(order.id)
 
             return request.redirect('/my/travel/order?ids=' + ','.join(map(str, created_order_ids)))
 
-        # Render confirmation page with created orders and payment methods
         ids_param = request.params.get('ids') or post.get('ids')
         orders = request.env['travel.order'].sudo()
         if ids_param:
@@ -55,16 +60,14 @@ class TravelBookingOrderController(http.Controller):
             except Exception:
                 orders = request.env['travel.order'].sudo()
 
-        # Get payment methods
-        payment_methods = request.env['payment.method'].sudo().search([
-            ('active', '=', True)
-        ])
+        payment_methods = request.env['payment.method'].sudo().search([('active', '=', True)])
 
         values = {
             'orders': orders,
             'payment_methods': payment_methods,
         }
         return request.render('travel_management.travel_booking_order', values)
+
     
     @http.route('/my/travel/order/pay', type='http', auth='user', website=True, methods=['POST'])
     def pay_travel_order(self, **post):
