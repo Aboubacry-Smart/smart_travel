@@ -3,145 +3,360 @@
     <template id="travel_booking_template" name="Reservation">
         <t t-call="website.layout">
             
-            <!-- Style personnalisé -->
+            <!-- Style minimaliste amélioré -->
             <style>
+                /* Variables CSS pour la cohérence */
+                :root {
+                    --primary-color: #714B67;
+                    --primary-light: #8b6580;
+                    --primary-dark: #5a3c52;
+                    --gray-50: #f9fafb;
+                    --gray-100: #f3f4f6;
+                    --gray-200: #e5e7eb;
+                    --gray-300: #d1d5db;
+                    --gray-600: #4b5563;
+                    --gray-900: #111827;
+                    --white: #ffffff;
+                    --radius: 12px;
+                    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                }
+
+                /* Reset et base */
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    line-height: 1.6;
+                    color: var(--gray-900);
+                }
+
+                /* Container principal */
                 .travel-booking-container {
-                    max-width: 800px;
+                    max-width: 900px;
                     margin: 40px auto;
-                    padding: 30px;
-                    background: #fff;
-                    border-radius: 16px;
-                    box-shadow: 0 5px 20px rgba(113, 75, 103, 0.1);
+                    padding: 0;
+                    background: var(--white);
+                    border-radius: var(--radius);
+                    box-shadow: var(--shadow-lg);
+                    overflow: hidden;
                 }
-                
+
+                /* Header section */
+                .travel-header {
+                    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+                    padding: 40px 30px;
+                    text-align: center;
+                    color: var(--white);
+                }
+
+                .travel-header h1 {
+                    margin: 0 0 8px 0;
+                    font-size: 28px;
+                    font-weight: 600;
+                    letter-spacing: -0.02em;
+                }
+
+                .travel-header p {
+                    margin: 0;
+                    opacity: 0.9;
+                    font-size: 16px;
+                }
+
+                /* Form section */
+                .travel-form-section {
+                    padding: 40px 30px;
+                }
+
+                .travel-form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr auto;
+                    gap: 20px;
+                    align-items: end;
+                }
+
+                /* Input groups */
                 .travel-input-group {
-                    margin-bottom: 15px;
+                    display: flex;
+                    flex-direction: column;
                 }
-                
+
+                .travel-input-group label {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: var(--gray-600);
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+
                 .travel-input-group select {
                     width: 100%;
-                    padding: 15px;
-                    border: 2px solid #e1e5eb;
-                    border-radius: 10px;
+                    padding: 16px 18px;
+                    border: 2px solid var(--gray-200);
+                    border-radius: var(--radius);
                     font-size: 16px;
-                    background-color: #f8f9fa;
+                    background-color: var(--white);
+                    color: var(--gray-900);
                     appearance: none;
-                    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
                     background-repeat: no-repeat;
-                    background-position: right 15px center;
-                    background-size: 16px;
-                    transition: all 0.3s ease;
+                    background-position: right 16px center;
+                    background-size: 18px;
+                    transition: all 0.2s ease;
+                    cursor: pointer;
                 }
-                
+
+                .travel-input-group select:hover {
+                    border-color: var(--gray-300);
+                }
+
                 .travel-input-group select:focus {
                     outline: none;
-                    border-color: #714B67;
-                    box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.2);
-                    background-color: white;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.1);
                 }
-                
+
+                /* Search button */
                 .travel-search-btn {
-                    width: 100%;
-                    padding: 20px;
-                    background: #714B67;
-                    color: white;
+                    padding: 16px 24px;
+                    background: var(--primary-color);
+                    color: var(--white);
                     border: none;
-                    border-radius: 10px;
-                    font-size: 18px;
-                    font-weight: 600;
+                    border-radius: var(--radius);
+                    font-size: 16px;
+                    font-weight: 500;
                     cursor: pointer;
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    transition: all 0.2s ease;
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    gap: 10px;
+                    justify-content: center;
+                    min-width: 120px;
+                    height: 58px;
                 }
-                
+
                 .travel-search-btn:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 7px 20px rgba(113, 75, 103, 0.4);
-                    background: #5d3d56;
+                    background: var(--primary-dark);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
                 }
-                
+
                 .travel-search-btn:active {
                     transform: translateY(0);
                 }
-                
+
+                .travel-search-btn i {
+                    font-size: 18px;
+                }
+
+                /* Alerts */
+                .travel-alert {
+                    margin: 30px;
+                    padding: 16px 20px;
+                    border-radius: var(--radius);
+                    font-size: 14px;
+                    border-left: 4px solid;
+                }
+
+                .travel-alert-warning {
+                    background: #fef3c7;
+                    border-left-color: #f59e0b;
+                    color: #92400e;
+                }
+
+                .travel-alert-danger {
+                    background: #fee2e2;
+                    border-left-color: #ef4444;
+                    color: #dc2626;
+                }
+
+                .travel-alert-info {
+                    background: #dbeafe;
+                    border-left-color: #3b82f6;
+                    color: #1d4ed8;
+                }
+
+                /* Results section */
+                .travel-results-section {
+                    margin-top: 30px;
+                    background: var(--gray-50);
+                    border-radius: var(--radius);
+                    overflow: hidden;
+                }
+
+                .travel-results-header {
+                    background: var(--white);
+                    padding: 24px 30px;
+                    border-bottom: 1px solid var(--gray-200);
+                }
+
+                .travel-results-header h4 {
+                    margin: 0;
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: var(--primary-color);
+                }
+
+                .travel-results-content {
+                    padding: 30px;
+                    background: var(--white);
+                }
+
+                .travel-results-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 30px;
+                    margin-bottom: 30px;
+                }
+
+                .travel-info-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+
+                .travel-info-label {
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: var(--gray-600);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+
+                .travel-info-value {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: var(--gray-900);
+                }
+
+                /* Book button */
+                .travel-book-btn {
+                    width: 100%;
+                    padding: 16px 24px;
+                    background: var(--primary-color);
+                    color: var(--white);
+                    border: none;
+                    border-radius: var(--radius);
+                    font-size: 16px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                .travel-book-btn:hover {
+                    background: var(--primary-dark);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+
                 /* Responsive Design */
                 @media (max-width: 768px) {
                     .travel-booking-container {
-                        padding: 20px;
-                        margin: 20px auto;
+                        margin: 20px;
+                        border-radius: var(--radius);
                     }
-                    
+
+                    .travel-header {
+                        padding: 30px 20px;
+                    }
+
+                    .travel-form-section {
+                        padding: 30px 20px;
+                    }
+
+                    .travel-form-grid {
+                        grid-template-columns: 1fr;
+                        gap: 20px;
+                    }
+
+                    .travel-search-btn {
+                        width: 100%;
+                    }
+
+                    .travel-results-grid {
+                        grid-template-columns: 1fr;
+                        gap: 20px;
+                    }
+
+                    .travel-alert {
+                        margin: 20px;
+                    }
                 }
-                
+
                 @media (max-width: 480px) {
                     .travel-booking-container {
-                        padding: 15px;
-                        margin: 15px auto;
-                        border-radius: 12px;
+                        margin: 15px;
                     }
-                    
-                    .travel-logo {
-                        width: 100px;
-                        height: 100px;
+
+                    .travel-header {
+                        padding: 25px 15px;
                     }
-                    
-                    .travel-logo i {
-                        font-size: 35px;
+
+                    .travel-header h1 {
+                        font-size: 24px;
                     }
-                    
-                    .travel-input-group select {
-                        padding: 12px;
+
+                    .travel-form-section {
+                        padding: 25px 15px;
                     }
-                    
-                    .travel-search-btn {
-                        padding: 14px;
-                        font-size: 16px;
+
+                    .travel-results-content {
+                        padding: 20px 15px;
                     }
                 }
-                
-                /* Animation */
-                @keyframes travelFadeIn {
+
+                /* Animations */
+                @keyframes fadeInUp {
                     from {
                         opacity: 0;
-                        transform: translateY(20px);
+                        transform: translateY(30px);
                     }
                     to {
                         opacity: 1;
                         transform: translateY(0);
                     }
                 }
-                
+
                 .travel-booking-container {
-                    animation: travelFadeIn 0.8s ease-out;
+                    animation: fadeInUp 0.6s ease-out;
                 }
             </style>
             
-            <!-- Contenu principal avec Bootstrap -->
-            <div class="container">
+            <!-- Contenu principal -->
+            <div class="container-fluid">
                 <div class="travel-booking-container">
-                   <form method="get" action="/my/travel/search">
-                        <div class="container-fluid">
-                            <div class="row align-items-center justify-content-center">
+                    <!-- Header -->
+                    <div class="travel-header">
+                        <h1>Rechercher un voyage</h1>
+                        <p>Trouvez le trajet parfait pour votre destination</p>
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="travel-form-section">
+                        <form method="get" action="/my/travel/search">
+                            <div class="travel-form-grid">
                                 <!-- Point de départ -->
-                                <div class="col-md-5 travel-input-group">
+                                <div class="travel-input-group">
+                                    <label for="depart">Départ</label>
                                     <select name="departure_point" id="depart" required="required">
-                                        <option value="" selected="true" disabled="true">Sélectionnez un point de départ</option>
+                                        <option value="" selected="true" disabled="true">Choisir un point de départ</option>
                                         <t t-foreach="travel_points" t-as="point">
                                             <option t-att-value="point.id" t-att-selected="point.id == departure_selected">
                                                 <t t-esc="point.name"/>
                                                 <t t-if="point.code"> (<t t-esc="point.code"/>)</t>
                                             </option>
                                         </t>
-                                    </select> 
+                                    </select>
                                 </div>
                                 
                                 <!-- Point d'arrivée -->
-                                <div class="col-md-5 travel-input-group">
+                                <div class="travel-input-group">
+                                    <label for="arrivee">Arrivée</label>
                                     <select name="arrival_point" id="arrivee" required="required">
-                                        <option value="" selected="true" disabled="true">Sélectionnez un point d'arrivée</option>
+                                        <option value="" selected="true" disabled="true">Choisir une destination</option>
                                         <t t-foreach="travel_points" t-as="point">
                                             <option t-att-value="point.id" t-att-selected="point.id == arrival_selected">
                                                 <t t-esc="point.name"/>
@@ -152,73 +367,95 @@
                                 </div>
                                 
                                 <!-- Bouton Rechercher -->
-                                <div class="col-md-2 travel-input-group">
-                                    <button type="submit" class="travel-search-btn">
-                                        <i class="fa fa-search"/>
-                                    </button>
-                                </div>
+                                <button type="submit" class="travel-search-btn">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
-                        </div>
-                    </form>
-                    
+                        </form>
+                    </div>
                 </div>
-                <!-- Section pour afficher les messages d'alerte et résultats -->
-                <div class="container mt-4">
-                    <div t-if="request.params.get('error') == 'missing_points'" class="alert alert-warning">
-                        Veuillez sélectionner un point de départ et un point d'arrivée.
-                    </div>
-                    
-                    <div t-if="request.params.get('error') == 'same_points'" class="alert alert-warning">
-                        Le point de départ et le point d'arrivée doivent être différents.
-                    </div>
-                    
-                    <div t-if="request.params.get('error') == 'invalid_points'" class="alert alert-danger">
-                        Les points sélectionnés sont invalides.
-                    </div>
-                    
-                    <!-- Message si aucune route trouvée -->
-                    <div t-if="route_not_found" class="alert alert-info">
-                        <strong>Aucune route disponible!</strong><br/>
-                        Aucun trajet n'a été trouvé entre <t t-esc="departure_name"/> et <t t-esc="arrival_name"/>.
-                    </div>
-                    
-                    <!-- Affichage de la route trouvée -->
-                    <div t-if="route_found" class="travel-booking-container mb-5">
-                        <h4 class="mb-3 text-primary display-6">Resultat de la recherche</h4>
-                        <div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Départ:</strong> <t t-esc="route_found.departure_point.name"/></p>
-                                    <p><strong>Arrivée:</strong> <t t-esc="route_found.arrival_point.name"/></p>
-                                    <p><strong>Prix:</strong> <t t-esc="route_found.price"/> <t t-esc="route_found.currency"/></p>
+
+                <!-- Messages d'alerte -->
+                <div t-if="request.params.get('error') == 'missing_points'" class="travel-alert travel-alert-warning">
+                    Veuillez sélectionner un point de départ et un point d'arrivée.
+                </div>
+                
+                <div t-if="request.params.get('error') == 'same_points'" class="travel-alert travel-alert-warning">
+                    Le point de départ et le point d'arrivée doivent être différents.
+                </div>
+                
+                <div t-if="request.params.get('error') == 'invalid_points'" class="travel-alert travel-alert-danger">
+                    Les points sélectionnés sont invalides.
+                </div>
+                
+                <!-- Message si aucune route trouvée -->
+                <div t-if="route_not_found" class="travel-alert travel-alert-info">
+                    <strong>Aucune route disponible</strong><br/>
+                    Aucun trajet n'a été trouvé entre <t t-esc="departure_name"/> et <t t-esc="arrival_name"/>.
+                </div>
+                
+                <!-- Résultats de la recherche -->
+                <div t-if="route_found" class="travel-booking-container">
+                    <div class="travel-results-section">
+                        <div class="travel-results-header">
+                            <h4>Trajet disponible</h4>
+                        </div>
+                        <div class="travel-results-content">
+                            <div class="travel-results-grid">
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Départ</span>
+                                    <span class="travel-info-value"><t t-esc="route_found.departure_point.name"/></span>
                                 </div>
-                                <div class="col-md-6">
-                                    <p><strong>Heure de départ:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_start * 60, 60))"/></p>
-                                    <p><strong>Heure d'arrivée:</strong> <t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_end * 60, 60))"/></p>
-                                    <p><strong>Durée:</strong> <t t-esc="route_found.duration"/> H</p>
-                                    
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Arrivée</span>
+                                    <span class="travel-info-value"><t t-esc="route_found.arrival_point.name"/></span>
+                                </div>
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Heure de départ</span>
+                                    <span class="travel-info-value"><t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_start * 60, 60))"/></span>
+                                </div>
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Heure d'arrivée</span>
+                                    <span class="travel-info-value"><t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_end * 60, 60))"/></span>
+                                </div>
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Durée</span>
+                                    <span class="travel-info-value"><t t-esc="route_found.duration"/> H</span>
+                                </div>
+                                <div class="travel-info-item">
+                                    <span class="travel-info-label">Prix</span>
+                                    <span class="travel-info-value"><t t-esc="route_found.price"/> <t t-esc="route_found.currency"/></span>
                                 </div>
                             </div>
-                            <div class="text-center mt-3">
-                                <button class="btn btn-outline-primary"
-                                        t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ', ' + str(route_found.price) + ', \'' + str(route_found.currency) + '\', ' + ')'
-                                ">Réserver maintenant</button>
-                            </div>
+                            <button class="travel-book-btn"
+                                    t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ', ' + str(route_found.price) + ', \'' + str(route_found.currency) + '\')'">
+                                Réserver ce trajet
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <script>
+
+            <!-- JavaScript -->
+            <script><![CDATA[
                 function redirect_to_booking_place(route_id, price, currency) {
-                    var params = new URLSearchParams({
+                    const params = new URLSearchParams({
                         route_id: route_id,
                         price: price,
                         currency: currency,
                     });
-                    var url = '/my/travel/place?' + params.toString();
+                    const url = '/my/travel/place?' + params.toString();
                     window.location.href = url;
                 }
-            </script>
+
+                // Amélioration UX: Auto-focus sur le premier select
+                document.addEventListener('DOMContentLoaded', function() {
+                    const firstSelect = document.getElementById('depart');
+                    if (firstSelect && !firstSelect.value) {
+                        firstSelect.focus();
+                    }
+                });
+            ]]></script>
         </t>
     </template>
 </odoo>

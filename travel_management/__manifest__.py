@@ -31,6 +31,7 @@ Long description of module's purpose
         'portal_views/travel_booking.xml',
         'portal_views/travel_booking_place.xml',
         'portal_views/travel_booking_order.xml',
+        'portal_views/travel_booking_ticket.xml',
         'views/payment_method.xml',
         'views/travel_order.xml',
         'views/views.xml',

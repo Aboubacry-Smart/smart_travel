@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="travel_booking_ticket" name="Ticket Status">
+        <t t-call="website.layout">
+            <div class="container mt-5 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+                                <h3 class="mb-3">Statut du ticket</h3>
+                                <t t-if="not found">
+                                    <div class="alert alert-danger">
+                                        Ticket introuvable. Vérifiez le code et réessayez.
+                                    </div>
+                                </t>
+                                <t t-if="found">
+                                    <div class="mb-3">
+                                        <span class="text-muted">Code</span>
+                                        <div class="fs-4 fw-bold"><t t-esc="order.code"/></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="text-muted">Statut</span>
+                                        <div>
+                                            <t t-if="status == 'draft'"><span class="badge bg-warning text-dark">En attente (Draft)</span></t>
+                                            <t t-if="status == 'confirm'"><span class="badge bg-success">Confirmé</span></t>
+                                            <t t-if="status == 'expired'"><span class="badge bg-danger">Expiré</span></t>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="text-muted">Trajet</span>
+                                        <div>
+                                            <t t-esc="order.route_id.departure_point.name"/> →
+                                            <t t-esc="order.route_id.arrival_point.name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <span class="text-muted">Heure de départ</span>
+                                            <div>
+                                                <t t-esc="'%02d:%02d' % (int(order.route_id.hour_start), int((order.route_id.hour_start % 1) * 60))"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span class="text-muted">Heure d'arrivée</span>
+                                            <div>
+                                                <t t-esc="'%02d:%02d' % (int(order.route_id.hour_end), int((order.route_id.hour_end % 1) * 60))"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="text-muted">Place</span>
+                                        <div>Place <t t-esc="order.place"/></div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
+ 
