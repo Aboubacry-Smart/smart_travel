@@ -78,8 +78,21 @@
                                     <span class="text-muted d-block">Numéro de siège</span>
                                     <div class="fs-5 fw-bold">Place <t t-esc="order.place"/></div>
                                 </div>
+
+                                <!-- Bouton Embarquer (visible uniquement pour les agents) -->
+                                <t t-if="is_agent">
+                                    <div class="text-center border-top pt-3">
+                                        <form method="post" t-attf-action="/my/travel/ticket/#{order.code}/board">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                                Embarquer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </t>
                             </t>
                         </div>
+
                         <div class="card-footer text-center text-muted small">
                             Merci d’avoir voyagé avec nous ✨
                         </div>

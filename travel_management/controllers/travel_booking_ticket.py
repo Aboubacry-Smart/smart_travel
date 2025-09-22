@@ -14,10 +14,14 @@ class TravelBookingTicketController(http.Controller):
         Order = request.env['travel.order'].sudo()
         order = Order.search([('code', '=', code)], order='id desc', limit=1)
 
+        user = request.env.user
+        is_agent = user.has_group('travel_management.group_travel_agent') if user else False
+
         values = {
             'found': bool(order),
             'order': order,
             'status': order.state if order else None,
+            'is_agent': is_agent,
         }
         return request.render('travel_management.travel_booking_ticket', values)
 
@@ -28,9 +32,15 @@ class TravelBookingTicketController(http.Controller):
         Order = request.env['travel.order'].sudo()
         order = Order.search([('code', '=', code)], order='id desc', limit=1)
 
+        user = request.env.user
+        is_agent = user.has_group('travel_management.group_travel_agent') if user else False
+
         values = {
             'found': bool(order),
             'order': order,
             'status': order.state if order else None,
+            'is_agent': is_agent,
         }
         return request.render('travel_management.travel_booking_ticket', values)
+
+    

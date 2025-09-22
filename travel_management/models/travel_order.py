@@ -10,6 +10,7 @@ import base64
 class TravelOrder(models.Model):
     _name = 'travel.order'
     _description = 'Travel Order' 
+    _inherit = ['mail.activity.mixin']
     
     route_id = fields.Many2one('travel.route', string='Route', required=True)
     passenger_id = fields.Many2one('res.partner', string='Passenger', required=True)
@@ -55,3 +56,25 @@ class TravelOrder(models.Model):
                     record.qr_code = base64.b64encode(buffer.getvalue())
                 except ImportError:
                     record.qr_code = False
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(TravelOrder, self).create(vals_list)
+        activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+        group = self.env.ref('travel_management.group_travel_caissier', raise_if_not_found=False)
+
+        if activity_type and group:
+            for record in records:
+                for user in group.users:
+                    try:
+                        record.activity_schedule(
+                            activity_type_id=activity_type.id,
+                            summary="Nouvelle réservation",
+                            note=f"Réservation {record.code or record.id} créée. Merci de traiter.",
+                            user_id=user.id,
+                            date_deadline=fields.Date.today(),
+                        )
+                    except Exception:
+                        # Fail safe: continue if a single activity cannot be scheduled
+                        continue
+        return records
