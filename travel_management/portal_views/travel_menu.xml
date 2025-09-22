@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <data>
-		<record id="website_travel_search_menu" model="website.menu">
-			<field name="name">Travel Booking</field>
-			<field name="url">/my/travel</field>
-			<field name="parent_id" ref="website.main_menu"/>
-			<field name="sequence" type="int">90</field>
-		</record>
-		<record id="website_travel_ticket_menu" model="website.menu">
-			<field name="name">Travel Ticket</field>
-			<field name="url">/my/ticket</field>
-			<field name="parent_id" ref="website.main_menu"/>
-			<field name="sequence" type="int">100</field>
-		</record>
-	</data>
-
+        <!-- Menu pour la recherche de voyage -->
+        <record id="website_travel_search_menu" model="website.menu">
+            <field name="name">Rechercher un voyage</field>
+            <field name="url">/my/travel</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">90</field>
+        </record>
+        
+        <!-- Menu pour la vérification de ticket -->
+        <record id="website_travel_ticket_menu" model="website.menu">
+            <field name="name">Vérifier mon ticket</field>
+            <field name="url">/my/ticket</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">100</field>
+        </record>
+    </data>
 </odoo>

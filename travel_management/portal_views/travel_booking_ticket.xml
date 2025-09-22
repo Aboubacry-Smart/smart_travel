@@ -1,63 +1,395 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
     <template id="travel_booking_ticket" name="Ticket Status">
-        <t t-call="website.layout">
-            <div class="container mt-5 mb-5">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="card shadow-sm">
-                            <div class="card-body p-4">
-                                <h3 class="mb-3">Statut du ticket</h3>
-                                <t t-if="not found">
-                                    <div class="alert alert-danger">
-                                        Ticket introuvable. Vérifiez le code et réessayez.
+    <t t-call="website.layout">
+        <div class="container mt-5 mb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                        <div class="card-header bg-primary text-white text-center py-3">
+                            <h3 class="mb-0">Ticket de voyage</h3>
+                        </div>
+                        <div class="card-body p-4">
+
+                            <!-- Cas ticket introuvable -->
+                            <t t-if="not found">
+                                <div class="alert alert-danger text-center">
+                                    Ticket introuvable. Vérifiez le code et réessayez.
+                                </div>
+                            </t>
+
+                            <!-- Cas ticket trouvé -->
+                            <t t-if="found">
+                                <!-- Code -->
+                                <div class="mb-4 text-center">
+                                    <span class="text-muted d-block">Code du ticket</span>
+                                    <div class="fs-3 fw-bold text-dark"><t t-esc="order.code"/></div>
+                                </div>
+
+                                <!-- Statut -->
+                                <div class="mb-4 text-center">
+                                    <span class="text-muted d-block">Statut</span>
+                                    <div class="mt-1">
+                                        <t t-if="status == 'draft'">
+                                            <span class="badge bg-warning text-dark px-3 py-2">⏳ En attente</span>
+                                        </t>
+                                        <t t-if="status == 'confirm'">
+                                            <span class="badge bg-success px-3 py-2">✅ Confirmé</span>
+                                        </t>
+                                        <t t-if="status == 'expired'">
+                                            <span class="badge bg-danger px-3 py-2">⛔ Expiré</span>
+                                        </t>
                                     </div>
-                                </t>
-                                <t t-if="found">
-                                    <div class="mb-3">
-                                        <span class="text-muted">Code</span>
-                                        <div class="fs-4 fw-bold"><t t-esc="order.code"/></div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <span class="text-muted">Statut</span>
+                                </div>
+
+                                <!-- Trajet -->
+                                <div class="border-top pt-3 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <t t-if="status == 'draft'"><span class="badge bg-warning text-dark">En attente (Draft)</span></t>
-                                            <t t-if="status == 'confirm'"><span class="badge bg-success">Confirmé</span></t>
-                                            <t t-if="status == 'expired'"><span class="badge bg-danger">Expiré</span></t>
+                                            <span class="text-muted d-block">Départ</span>
+                                            <strong><t t-esc="order.route_id.departure_point.name"/></strong>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <span class="text-muted">Trajet</span>
+                                        <div class="fs-4 fw-bold text-primary">→</div>
                                         <div>
-                                            <t t-esc="order.route_id.departure_point.name"/> →
-                                            <t t-esc="order.route_id.arrival_point.name"/>
+                                            <span class="text-muted d-block">Arrivée</span>
+                                            <strong><t t-esc="order.route_id.arrival_point.name"/></strong>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <span class="text-muted">Heure de départ</span>
-                                            <div>
-                                                <t t-esc="'%02d:%02d' % (int(order.route_id.hour_start), int((order.route_id.hour_start % 1) * 60))"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <span class="text-muted">Heure d'arrivée</span>
-                                            <div>
-                                                <t t-esc="'%02d:%02d' % (int(order.route_id.hour_end), int((order.route_id.hour_end % 1) * 60))"/>
-                                            </div>
+                                </div>
+
+                                <!-- Heures -->
+                                <div class="row mb-3">
+                                    <div class="col-6 text-center">
+                                        <span class="text-muted d-block">Heure départ</span>
+                                        <div class="fw-bold">
+                                            <t t-esc="'%02d:%02d' % (int(order.route_id.hour_start), int((order.route_id.hour_start % 1) * 60))"/>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <span class="text-muted">Place</span>
-                                        <div>Place <t t-esc="order.place"/></div>
+                                    <div class="col-6 text-center">
+                                        <span class="text-muted d-block">Heure arrivée</span>
+                                        <div class="fw-bold">
+                                            <t t-esc="'%02d:%02d' % (int(order.route_id.hour_end), int((order.route_id.hour_end % 1) * 60))"/>
+                                        </div>
                                     </div>
-                                </t>
-                            </div>
+                                </div>
+
+                                <!-- Place -->
+                                <div class="text-center border-top pt-3">
+                                    <span class="text-muted d-block">Numéro de siège</span>
+                                    <div class="fs-5 fw-bold">Place <t t-esc="order.place"/></div>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="card-footer text-center text-muted small">
+                            Merci d’avoir voyagé avec nous ✨
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </t>
+</template>
+
+
+
+    <template id="travel_booking_ticket_search" name="Ticket Search">
+        <t t-call="website.layout">
+            <!-- Styles copiés et adaptés du template original -->
+            <style>
+                :root {
+                    --primary-color: #714B67;
+                    --primary-light: #8b6580;
+                    --primary-dark: #5a3c52;
+                    --gray-50: #f9fafb;
+                    --gray-100: #f3f4f6;
+                    --gray-200: #e5e7eb;
+                    --gray-300: #d1d5db;
+                    --gray-600: #4b5563;
+                    --gray-900: #111827;
+                    --white: #ffffff;
+                    --radius: 12px;
+                    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                }
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    line-height: 1.6;
+                    color: var(--gray-900);
+                }
+
+                .travel-booking-container {
+                    max-width: 900px;
+                    margin: 40px auto;
+                    background: var(--white);
+                    border-radius: var(--radius);
+                    box-shadow: var(--shadow-lg);
+                    overflow: hidden;
+                    animation: fadeInUp 0.6s ease-out;
+                }
+
+                .travel-header {
+                    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+                    padding: 40px 30px;
+                    text-align: center;
+                    color: var(--white);
+                }
+
+                .travel-header h1 {
+                    margin: 0 0 8px 0;
+                    font-size: 28px;
+                    font-weight: 600;
+                    letter-spacing: -0.02em;
+                }
+
+                .travel-header p {
+                    margin: 0;
+                    opacity: 0.9;
+                    font-size: 16px;
+                }
+
+                .travel-form-section {
+                    padding: 40px 30px;
+                }
+
+                .travel-input-group {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .travel-input-group label {
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: var(--gray-600);
+                    margin-bottom: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+
+                .travel-input-group input {
+                    width: 100%;
+                    padding: 16px 17px;
+                    border: 2px solid var(--gray-200);
+                    border-radius: var(--radius);
+                    font-size: 16px;
+                    background-color: var(--white);
+                    color: var(--gray-900);
+                    transition: all 0.2s ease;
+                }
+
+                .travel-input-group input:hover {
+                    border-color: var(--gray-300);
+                }
+
+                .travel-input-group input:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.1);
+                }
+
+                .travel-search-btn {
+                    padding: 16px 24px;
+                    background: var(--primary-color);
+                    color: var(--white);
+                    border: none;
+                    border-radius: var(--radius);
+                    font-size: 16px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 120px;
+                    height: 58px;
+                }
+
+                .travel-search-btn:hover {
+                    background: var(--primary-dark);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+
+                .travel-search-btn:active {
+                    transform: translateY(0);
+                }
+
+                .travel-search-btn i {
+                    font-size: 18px;
+                }
+
+                .travel-alert {
+                    margin: 30px;
+                    padding: 16px 20px;
+                    border-radius: var(--radius);
+                    font-size: 14px;
+                    border-left: 4px solid;
+                }
+
+                .travel-alert-danger {
+                    background: #fee2e2;
+                    border-left-color: #ef4444;
+                    color: #dc2626;
+                }
+
+                .travel-results-section {
+                    margin-top: 30px;
+                    background: var(--gray-50);
+                    border-radius: var(--radius);
+                    overflow: hidden;
+                }
+
+                .travel-results-header {
+                    background: var(--white);
+                    padding: 24px 30px;
+                    border-bottom: 1px solid var(--gray-200);
+                }
+
+                .travel-results-header h4 {
+                    margin: 0;
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: var(--primary-color);
+                }
+
+                .travel-results-content {
+                    padding: 30px;
+                    background: var(--white);
+                }
+
+                .travel-results-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 30px;
+                    margin-bottom: 30px;
+                }
+
+                .travel-info-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+
+                .travel-info-label {
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: var(--gray-600);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+
+                .travel-info-value {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: var(--gray-900);
+                }
+
+                @media (max-width: 768px) {
+                    .travel-booking-container {
+                        margin: 20px;
+                        border-radius: var(--radius);
+                    }
+
+                    .travel-header {
+                        padding: 30px 20px;
+                    }
+
+                    .travel-form-section {
+                        padding: 30px 20px;
+                    }
+
+                    .travel-search-btn {
+                        width: 100%;
+                    }
+
+                    .travel-results-grid {
+                        grid-template-columns: 1fr;
+                        gap: 20px;
+                    }
+
+                    .travel-alert {
+                        margin: 20px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .travel-booking-container {
+                        margin: 15px;
+                    }
+
+                    .travel-header {
+                        padding: 25px 15px;
+                    }
+
+                    .travel-header h1 {
+                        font-size: 24px;
+                    }
+
+                    .travel-form-section {
+                        padding: 25px 15px;
+                    }
+
+                    .travel-results-content {
+                        padding: 20px 15px;
+                    }
+                }
+
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            </style>
+
+            <!-- Contenu principal -->
+            <div class="container-fluid">
+                <div class="travel-booking-container">
+                    <!-- Header -->
+                    <div class="travel-header">
+                        <h1>Rechercher un ticket</h1>
+                        <p>Vérifiez le statut de votre ticket de voyage</p>
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="travel-form-section">
+                        <form t-att-action="'/my/travel/ticket/' + (code or '')" method="post">
+                            <div class="travel-form-grid" style="display: flex; gap: 20px; align-items: end;">
+                                <div class="travel-input-group" style="flex: 1;">
+                                    <label for="ticket_code">Code du ticket</label>
+                                    <input type="text" name="code" id="ticket_code" t-att-value="code or ''"
+                                        placeholder="Entrez le code de votre ticket" required="required"/>
+                                </div>
+                                <button type="submit" class="travel-search-btn">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript -->
+            <script><![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    const ticketInput = document.getElementById('ticket_code');
+                    if (ticketInput && !ticketInput.value) {
+                        ticketInput.focus();
+                    }
+                });
+            ]]></script>
         </t>
     </template>
+    </data>
 </odoo>
  

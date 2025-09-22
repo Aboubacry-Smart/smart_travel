@@ -29,6 +29,7 @@ class TravelOrder(models.Model):
     paid_by_user_id = fields.Many2one('res.users', string='Paid by', readonly=True)
     code = fields.Char(string='Code', readonly=True, default=lambda self: ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)))
     qr_code = fields.Binary(string='QR Code', compute='_compute_qr_code')
+    date = fields.Datetime(string='Date', readonly=True)
     
 
     @api.depends('code')

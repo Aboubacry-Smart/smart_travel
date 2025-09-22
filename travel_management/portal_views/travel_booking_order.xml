@@ -494,7 +494,7 @@
                     <!-- Section Paiement -->
                     <div class="col-lg-6">
                         <div class="travel-order-section">
-                            <div class="section-header payment">
+                            <div id="payment_header" class="section-header payment">
                                 <h3>
                                     <i class="fa fa-credit-card"></i>
                                     Effectuer le paiement
@@ -751,6 +751,7 @@
                     
                     // Cacher le formulaire
                     form.style.display = 'none';
+                    document.getElementById('payment_header').style.display = 'none';
                     
                     // Afficher le message de succès
                     document.getElementById('success-message').style.display = 'block';
