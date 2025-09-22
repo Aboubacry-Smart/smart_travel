@@ -8,6 +8,12 @@
 			<field name="parent_id" ref="website.main_menu"/>
 			<field name="sequence" type="int">90</field>
 		</record>
+		<record id="website_travel_ticket_menu" model="website.menu">
+			<field name="name">Travel Ticket</field>
+			<field name="url">/my/ticket</field>
+			<field name="parent_id" ref="website.main_menu"/>
+			<field name="sequence" type="int">100</field>
+		</record>
 	</data>
 
 </odoo>
