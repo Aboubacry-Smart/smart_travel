@@ -62,13 +62,18 @@
                                     <div class="col-6 text-center">
                                         <span class="text-muted d-block">Heure départ</span>
                                         <div class="fw-bold">
-                                            <t t-esc="'%02d:%02d' % (int(order.route_id.hour_start), int((order.route_id.hour_start % 1) * 60))"/>
+                                            <t t-set="line" t-value="order.route_line_id or (order.route_id.route_line_ids and order.route_id.route_line_ids[0])"/>
+                                            <t t-if="line">
+                                                <t t-esc="'%02d:%02d' % (int(line.hour_start), int((line.hour_start % 1) * 60))"/>
+                                            </t>
                                         </div>
                                     </div>
                                     <div class="col-6 text-center">
                                         <span class="text-muted d-block">Heure arrivée</span>
                                         <div class="fw-bold">
-                                            <t t-esc="'%02d:%02d' % (int(order.route_id.hour_end), int((order.route_id.hour_end % 1) * 60))"/>
+                                            <t t-if="line">
+                                                <t t-esc="'%02d:%02d' % (int(line.hour_end), int((line.hour_end % 1) * 60))"/>
+                                            </t>
                                         </div>
                                     </div>
                                 </div>

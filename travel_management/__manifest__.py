@@ -38,5 +38,6 @@ Long description of module's purpose
         'views/views.xml',
         'views/templates.xml',
     ],
+    'post_init_hook': 'post_init_hook',
 }
 

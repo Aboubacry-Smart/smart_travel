@@ -609,8 +609,11 @@
                                         <div class="travel-info-row">
                                             <span class="travel-info-label">Horaires :</span>
                                             <span class="travel-info-value">
-                                                <t t-esc="'%02d:%02d' % (int(first_order.route_id.hour_start), int((first_order.route_id.hour_start % 1) * 60))"/> - 
-                                                <t t-esc="'%02d:%02d' % (int(first_order.route_id.hour_end), int((first_order.route_id.hour_end % 1) * 60))"/>
+                                                <t t-set="line" t-value="first_order.route_line_id or (first_order.route_id.route_line_ids and first_order.route_id.route_line_ids[0])"/>
+                                                <t t-if="line">
+                                                    <t t-esc="'%02d:%02d' % (int(line.hour_start), int((line.hour_start % 1) * 60))"/> -
+                                                    <t t-esc="'%02d:%02d' % (int(line.hour_end), int((line.hour_end % 1) * 60))"/>
+                                                </t>
                                             </span>
                                         </div>
                                     </div>

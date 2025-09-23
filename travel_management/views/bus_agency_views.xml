@@ -2,8 +2,8 @@
 <odoo>
     <data>
         
-        <!-- Bus Agency Tree View -->
-        <record id="bus_agency_tree_view" model="ir.ui.view">
+        <!-- Bus Agency list View -->
+        <record id="bus_agency_list_view" model="ir.ui.view">
             <field name="name">bus.agency.list</field>
             <field name="model">bus.agency</field>
             <field name="arch" type="xml">

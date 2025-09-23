@@ -7,3 +7,4 @@ from . import travel_route
 from . import bus_agency
 from . import travel_order
 from . import payment_method
+from . import travel_route_line

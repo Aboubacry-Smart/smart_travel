@@ -332,7 +332,7 @@
                     <div class="travel-header">
                         <h1>Rechercher un voyage</h1>
                         <p>Trouvez le trajet parfait pour votre destination</p>
-                    </div>
+                    </div> 
 
                     <!-- Form Section -->
                     <div class="travel-form-section">
@@ -412,15 +412,15 @@
                                 </div>
                                 <div class="travel-info-item">
                                     <span class="travel-info-label">Heure de départ</span>
-                                    <span class="travel-info-value"><t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_start * 60, 60))"/></span>
+                                    <span class="travel-info-value"><t t-esc="hour_start_str or ''"/></span>
                                 </div>
                                 <div class="travel-info-item">
                                     <span class="travel-info-label">Heure d'arrivée</span>
-                                    <span class="travel-info-value"><t t-esc="'{0:02.0f}:{1:02.0f}'.format(*divmod(route_found.hour_end * 60, 60))"/></span>
+                                    <span class="travel-info-value"><t t-esc="hour_end_str or ''"/></span>
                                 </div>
                                 <div class="travel-info-item">
                                     <span class="travel-info-label">Durée</span>
-                                    <span class="travel-info-value"><t t-esc="route_found.duration"/> H</span>
+                                    <span class="travel-info-value"><t t-esc="duration_str or ''"/></span>
                                 </div>
                                 <div class="travel-info-item">
                                     <span class="travel-info-label">Prix</span>

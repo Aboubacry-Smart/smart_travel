@@ -13,6 +13,7 @@ class TravelOrder(models.Model):
     _inherit = ['mail.activity.mixin']
     
     route_id = fields.Many2one('travel.route', string='Route', required=True)
+    route_line_id = fields.Many2one('travel.route.line', string='Route Line', help="Selected departure for this order")
     passenger_id = fields.Many2one('res.partner', string='Passenger', required=True)
     passenger_name = fields.Char(related='passenger_id.name')
     passenger_phone = fields.Char(related='passenger_id.phone')

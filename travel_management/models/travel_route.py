@@ -15,9 +15,7 @@ class TravelRoute(models.Model):
     arrival_point = fields.Many2one('travel.point', string='Arrival Point', required=True)
     bus_agency = fields.Many2one('bus.agency', string='Bus Name', required=True)
     driver_id = fields.Many2one('res.partner', string='Driver', required=True)
-    hour_start = fields.Float(string='Hour Start', required=True)
-    hour_end = fields.Float(string='Hour End', required=True)
-    duration = fields.Char(string="Duration", compute="_compute_duration", store=True)
+    route_line_ids = fields.One2many('travel.route.line', 'route_id', string='Departures')
     state = fields.Selection([('draft','Draft'),('confirm','Confirm'),('cancel','Cancel')],default='draft',string="Status",tracking=True)
     price = fields.Float(string='Price', required=True)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.user.company_id.currency_id)
@@ -25,10 +23,15 @@ class TravelRoute(models.Model):
     travels_ids = fields.One2many('travel.order', 'route_id', string='Travels') 
 
     def action_move_confirm(self):
-        if self.price > 0 and self.hour_start < self.hour_end:
-            self.state ='confirm'
-        else:
-            raise ValidationError('Le prix doit etre superieur a 0 et l\'heure de depart doit etre inferieur a l\'heure de fin')
+        for route in self:
+            if route.price <= 0:
+                raise ValidationError(_('Le prix doit être supérieur à 0'))
+            if not route.route_line_ids:
+                raise ValidationError(_('Veuillez définir au moins un horaire de départ pour cette route.'))
+            for line in route.route_line_ids:
+                if line.hour_start >= line.hour_end:
+                    raise ValidationError(_("L'heure de départ doit être inférieure à l'heure d'arrivée pour toutes les lignes."))
+        self.state = 'confirm'
     
     def action_move_cancel(self):
         self.state ='cancel'
@@ -36,11 +39,6 @@ class TravelRoute(models.Model):
     def action_move_draft(self):
         self.state='draft'
 
-    @api.depends('hour_start', 'hour_end')
-    def _compute_duration(self):
-        for record in self:
-            record.duration = record.hour_end - record.hour_start
-    
     @api.depends('departure_point', 'arrival_point')
     def _compute_name(self):
         for record in self:

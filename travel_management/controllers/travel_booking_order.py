@@ -2,6 +2,7 @@ from odoo import http
 from odoo.http import request
 from datetime import datetime
 import logging
+import base64
 
 
 class TravelBookingOrderController(http.Controller):
@@ -27,6 +28,8 @@ class TravelBookingOrderController(http.Controller):
 
             created_order_ids = []
             Partner = request.env['res.partner'].sudo()
+            route = request.env['travel.route'].sudo().browse(route_id)
+            first_line = route.route_line_ids[:1]
             for seat in [s for s in selected_seats if s]:
                 name = (post.get(f'passenger_{seat}_name') or '').strip()
                 phone = (post.get(f'passenger_{seat}_phone') or '').strip()
@@ -42,6 +45,7 @@ class TravelBookingOrderController(http.Controller):
 
                 order_vals = {
                     'route_id': route_id,
+                    'route_line_id': first_line.id if first_line else False,
                     'passenger_id': partner.id,
                     'place': place,
                     'date': order_date,   # ✅ Ajout du champ date

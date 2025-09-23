@@ -2,8 +2,8 @@
 <odoo>
     <data>
         
-        <!-- Travel Route Tree View -->
-        <record id="travel_route_tree_view" model="ir.ui.view">
+        <!-- Travel Route list View -->
+        <record id="travel_route_list_view" model="ir.ui.view">
             <field name="name">travel.route.list</field>
             <field name="model">travel.route</field>
             <field name="arch" type="xml">
@@ -52,26 +52,21 @@
                             <group>
                                 <field name="departure_point"/>
                                 <field name="arrival_point"/>
-                                <field name="hour_start"/>
-                                <field name="hour_end"/>
-                                <field name="duration"/>
                             </group>
                         </group>
-                        <group name="name" string="Reservations">
-                            <field name="travels_ids"> 
-                                <list>
-                                    <field name="passenger_name"/>
-                                    <field name="passenger_phone"/>
-                                    <field name="passenger_sexe"/>
-                                    <field name="place"/>
-                                    <field name="date"/>
-                                    <field name="state"/>
-                                </list>
-                            </field>
-                        </group>
+                        <notebook>
+                            <page string="Lignes">
+                                <field name="route_line_ids"> 
+                                    <list editable="bottom">
+                                        <field name="hour_start"/>
+                                        <field name="hour_end"/>
+                                        <field name="duration"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                     <chatter/>
-                    
                 </form>
             </field>
         </record>
@@ -90,6 +85,5 @@
                 </p>
             </field>
         </record>
-
     </data>
 </odoo>

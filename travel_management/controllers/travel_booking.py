@@ -54,6 +54,15 @@ class TravelBooking(http.Controller):
         # Si une route existe, l'ajouter aux valeurs
         if route:
             values['route_found'] = route
+            # Heures et durée depuis la première ligne
+            first_line = route.route_line_ids[:1]
+            if first_line:
+                hs = first_line.hour_start
+                he = first_line.hour_end
+                duration = he - hs
+                values['hour_start_str'] = '{0:02.0f}:{1:02.0f}'.format(*divmod(hs * 60, 60))
+                values['hour_end_str'] = '{0:02.0f}:{1:02.0f}'.format(*divmod(he * 60, 60))
+                values['duration_str'] = f"{duration} H"
         else:
             values['route_not_found'] = True
             # Récupérer les noms des points pour le message

@@ -2,8 +2,8 @@
 <odoo>
     <data>
         
-        <!-- Trip Package Tree View -->
-        <record id="trip_package_tree_view" model="ir.ui.view">
+        <!-- Trip Package list View -->
+        <record id="trip_package_list_view" model="ir.ui.view">
             <field name="name">trip.package.list</field>
             <field name="model">trip.package</field>
             <field name="arch" type="xml">
