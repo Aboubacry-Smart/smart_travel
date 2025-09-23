@@ -29,7 +29,19 @@ class TravelBookingOrderController(http.Controller):
             created_order_ids = []
             Partner = request.env['res.partner'].sudo()
             route = request.env['travel.route'].sudo().browse(route_id)
-            first_line = route.route_line_ids[:1]
+            # Determine selected route line from post or fallback to first
+            posted_line_id = (post.get('route_line_id') or '').strip()
+            selected_line = False
+            if posted_line_id:
+                try:
+                    posted_line_id_int = int(posted_line_id)
+                    candidate = request.env['travel.route.line'].sudo().browse(posted_line_id_int)
+                    if candidate.exists() and candidate.route_id.id == route.id:
+                        selected_line = candidate
+                except Exception:
+                    selected_line = False
+            if not selected_line:
+                selected_line = route.route_line_ids[:1]
             for seat in [s for s in selected_seats if s]:
                 name = (post.get(f'passenger_{seat}_name') or '').strip()
                 phone = (post.get(f'passenger_{seat}_phone') or '').strip()
@@ -45,7 +57,7 @@ class TravelBookingOrderController(http.Controller):
 
                 order_vals = {
                     'route_id': route_id,
-                    'route_line_id': first_line.id if first_line else False,
+                    'route_line_id': selected_line.id if selected_line else False,
                     'passenger_id': partner.id,
                     'place': place,
                     'date': order_date,   # ✅ Ajout du champ date

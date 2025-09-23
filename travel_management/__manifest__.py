@@ -26,6 +26,7 @@ Long description of module's purpose
         'security/security.xml',
         'views/travel_point_views.xml',
         'views/travel_route_views.xml',
+        'views/travel_route_line_views.xml',
         'views/trip_package_views.xml',
         'views/bus_agency_views.xml',
         'portal_views/travel_menu.xml',

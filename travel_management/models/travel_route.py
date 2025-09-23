@@ -21,6 +21,22 @@ class TravelRoute(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.user.company_id.currency_id)
     currency = fields.Char(related='currency_id.name', string='Currency')
     travels_ids = fields.One2many('travel.order', 'route_id', string='Travels') 
+    route_line_ids = fields.One2many("travel.route.line", "route_id", string="Lignes")
+    route_line_count = fields.Integer(string="Nombre de lignes", compute="_compute_route_line_count")
+
+    def _compute_route_line_count(self):
+        for route in self:
+            route.route_line_count = len(route.route_line_ids)
+
+    def action_open_route_lines(self):
+        return {
+            'name': 'Lignes',
+            'type': 'ir.actions.act_window',
+            'res_model': 'travel.route.line',
+            'view_mode': 'list,form',
+            'domain': [('route_id', '=', self.id)],
+            'context': {'default_route_id': self.id},
+        }
 
     def action_move_confirm(self):
         for route in self:

@@ -401,37 +401,56 @@
                             <h4>Trajet disponible</h4>
                         </div>
                         <div class="travel-results-content">
-                            <div class="travel-results-grid">
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Départ</span>
-                                    <span class="travel-info-value"><t t-esc="route_found.departure_point.name"/></span>
+                            <div class="container">
+                                <!-- Ligne 1 : Select -->
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <label for="route_line_select" class="form-label fw-bold">Heure de départ : Heure d'arrivée (Estimée) </label>
+                                        <select id="route_line_select" class="form-select">
+                                            <t t-foreach="route_found.route_line_ids" t-as="l">
+                                                <option t-att-value="l.id">
+                                                    <t t-esc="'%02d:%02d' % (int(l.hour_start), int((l.hour_start % 1) * 60))"/> -
+                                                    <t t-esc="'%02d:%02d' % (int(l.hour_end), int((l.hour_end % 1) * 60))"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Arrivée</span>
-                                    <span class="travel-info-value"><t t-esc="route_found.arrival_point.name"/></span>
+
+                                <!-- Ligne 2 : Infos -->
+                                <div class="row text-center">
+                                    <div class="col-md-4 col-12 mb-2">
+                                        <div class="p-2 border rounded shadow-sm">
+                                            <span class="d-block fw-bold">Départ</span>
+                                            <span><t t-esc="route_found.departure_point.name"/></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mb-2">
+                                        <div class="p-2 border rounded shadow-sm">
+                                            <span class="d-block fw-bold">Arrivée</span>
+                                            <span><t t-esc="route_found.arrival_point.name"/></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mb-2">
+                                        <div class="p-2 border rounded shadow-sm">
+                                            <span class="d-block fw-bold">Prix</span>
+                                            <span><t t-esc="route_found.price"/> <t t-esc="route_found.currency"/></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Heure de départ</span>
-                                    <span class="travel-info-value"><t t-esc="hour_start_str or ''"/></span>
-                                </div>
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Heure d'arrivée</span>
-                                    <span class="travel-info-value"><t t-esc="hour_end_str or ''"/></span>
-                                </div>
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Durée</span>
-                                    <span class="travel-info-value"><t t-esc="duration_str or ''"/></span>
-                                </div>
-                                <div class="travel-info-item">
-                                    <span class="travel-info-label">Prix</span>
-                                    <span class="travel-info-value"><t t-esc="route_found.price"/> <t t-esc="route_found.currency"/></span>
+
+                                <!-- Ligne 3 : Bouton -->
+                                <div class="row mt-3">
+                                    <div class="col-12 text-center">
+                                        <button class="btn btn-primary travel-book-btn"
+                                                t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ', ' + str(route_found.price) + ', \'' + str(route_found.currency) + '\')'">
+                                            Réserver ce trajet
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <button class="travel-book-btn"
-                                    t-att-onclick="'redirect_to_booking_place(' + str(route_found.id) + ', ' + str(route_found.price) + ', \'' + str(route_found.currency) + '\')'">
-                                Réserver ce trajet
-                            </button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -439,10 +458,13 @@
             <!-- JavaScript -->
             <script><![CDATA[
                 function redirect_to_booking_place(route_id, price, currency) {
+                    var routeLineSelect = document.getElementById('route_line_select');
+                    var route_line_id = routeLineSelect ? routeLineSelect.value : '';
                     const params = new URLSearchParams({
                         route_id: route_id,
                         price: price,
                         currency: currency,
+                        route_line_id: route_line_id,
                     });
                     const url = '/my/travel/place?' + params.toString();
                     window.location.href = url;

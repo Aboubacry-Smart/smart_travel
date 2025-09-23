@@ -14,6 +14,22 @@ class TravelRouteLine(models.Model):
     hour_end = fields.Float(string='Hour End', required=True)
     duration = fields.Float(string="Duration (hours)", compute="_compute_duration", store=True)
 
+    order_count = fields.Integer(string="Nombre de réservations", compute="_compute_order_count")
+
+    def _compute_order_count(self):
+        for line in self:
+            line.order_count = self.env['travel.order'].search_count([('route_line_id', '=', line.id)])
+
+    def action_open_orders(self):
+        return {
+            'name': 'Réservations',
+            'type': 'ir.actions.act_window',
+            'res_model': 'travel.order',
+            'view_mode': 'list,form',
+            'domain': [('route_line_id', '=', self.id)],
+            'context': {'default_route_line_id': self.id},
+        }
+
     @api.depends('hour_start', 'hour_end')
     def _compute_duration(self):
         for rec in self:

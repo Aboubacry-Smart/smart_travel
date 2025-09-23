@@ -39,6 +39,15 @@
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_route_lines"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-road">
+                                <field string="Lignes" name="route_line_count" widget="statinfo"/>
+                            </button>
+                        </div>
+
                         <!-- Informations générales -->
                         <group>
                             <group>

@@ -679,6 +679,7 @@
                                     <input type="hidden" id="selected_seats_input" name="selected_seats" value=""/>
                                     <input type="hidden" id="total_amount_input" name="total_amount" value="0"/>
                                     <input type="hidden" name="route_id" t-att-value="route_id"/>
+                                    <input type="hidden" name="route_line_id" t-att-value="route_line_id"/>
                                     <input type="hidden" name="price_per_seat" t-att-value="price"/>
 
                                     <!-- Bouton de confirmation -->
