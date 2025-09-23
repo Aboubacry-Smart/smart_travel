@@ -749,18 +749,12 @@
                         return false;
                     }
                     
-                    // Simuler l'envoi (en réalité, le formulaire sera soumis au serveur)
+                    // Désactiver le bouton pour éviter les doubles envois
+                    event.target.disabled = true;
+                    event.target.textContent = 'Envoi en cours...';
+                    // Forcer la soumission du formulaire pour éviter qu'un autre script ne l'empêche
                     event.preventDefault();
-                    
-                    // Cacher le formulaire
-                    form.style.display = 'none';
-                    document.getElementById('payment_header').style.display = 'none';
-                    
-                    // Afficher le message de succès
-                    document.getElementById('success-message').style.display = 'block';
-                    
-                    // Note: Dans un vrai scénario, vous soumettriez le formulaire au serveur
-                    // form.submit(); 
+                    form.submit();
                 }
                 
                 function printReceipt() {
