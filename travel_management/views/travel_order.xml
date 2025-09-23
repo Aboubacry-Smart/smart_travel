@@ -34,6 +34,20 @@
                             <field name="invoice_id" invisible="1"/>
                             <div>Facture</div>
                         </button>
+                        <button name="action_view_origin"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-link"
+                                invisible="not origin">
+                            <div>Origine</div>
+                        </button>
+                        <button name="action_view_children"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-users"
+                            invisible="child_order_ids">
+                            <field name="child_order_count" widget="statinfo" string="Réservations liées" />
+                        </button>
                     </div>
                     <group>
                         <group>
@@ -41,9 +55,10 @@
                             <field name="passenger_id"/>
                             <field name="place"/>
                             <field name="date"/>
+                            <field name="origin"/>
                         </group>                        
                         <group>
-                            <field name="state"/>
+                            <field name="state" readonly="origin" />
                             <field name="code"/>
                             <field name="payment_method_id"/>
                             <field name="payment_proof" widget="image"/>

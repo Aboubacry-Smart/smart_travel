@@ -60,9 +60,13 @@ class TravelBookingOrderController(http.Controller):
                     'route_line_id': selected_line.id if selected_line else False,
                     'passenger_id': partner.id,
                     'place': place,
-                    'date': order_date,   # ✅ Ajout du champ date
+                    'date': order_date, 
                 }
                 order = request.env['travel.order'].sudo().create(order_vals)
+                if not created_order_ids:
+                    created_order_ids.append(order.id)
+                else:
+                    order.write({'origin': request.env['travel.order'].sudo().browse(created_order_ids[0]).code})
                 created_order_ids.append(order.id)
 
             return request.redirect('/my/travel/order?ids=' + ','.join(map(str, created_order_ids)))
