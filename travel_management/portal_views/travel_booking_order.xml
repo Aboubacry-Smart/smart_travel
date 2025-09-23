@@ -494,14 +494,14 @@
                     <!-- Section Paiement -->
                     <div class="col-lg-6">
                         <div class="travel-order-section">
-                            <div id="payment_header" class="section-header payment">
+                            <div id="payment_header" class="section-header payment" t-attf-style="display: #{(success_message or (orders and orders[0].state == 'confirm')) and 'none' or 'block'};">
                                 <h3>
                                     <i class="fa fa-credit-card"></i>
                                     Effectuer le paiement
                                 </h3>
                             </div>
                             <div class="section-content">
-                                <form method="post" enctype="multipart/form-data" action="/my/travel/order/pay" id="payment-form">
+                                <form method="post" enctype="multipart/form-data" action="/my/travel/order/pay" id="payment-form" t-attf-style="display: #{(success_message or (orders and orders[0].state == 'confirm')) and 'none' or 'block'};">
                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                     <input type="hidden" name="order_ids" t-att-value="','.join([str(o.id) for o in orders])"/>
                                     
@@ -548,12 +548,14 @@
                                     </button>
                                 </form>
                                 
-                                <!-- Message de succès (caché par défaut) -->
-                                <div id="success-message" class="success-message" style="display: none;">
+                                <!-- Message de succès -->
+                                <div id="success-message" class="success-message" t-attf-style="display: #{(success_message or (orders and orders[0].state == 'confirm')) and 'block' or 'none'};">
                                     <div class="success-icon">
                                         <i class="fa fa-check-circle"></i>
                                     </div>
-                                    <h4 class="success-title">Paiement validé avec succès !</h4>
+                                    <h4 class="success-title">
+                                        <t t-esc="success_message or 'Paiement en attente de validation'"/>
+                                    </h4>
                                     <p class="success-description">
                                         Votre preuve de paiement a été envoyée pour vérification. 
                                         Vous recevrez une confirmation sous peu.
@@ -752,7 +754,19 @@
                     // Désactiver le bouton pour éviter les doubles envois
                     event.target.disabled = true;
                     event.target.textContent = 'Envoi en cours...';
-                    // Forcer la soumission du formulaire pour éviter qu'un autre script ne l'empêche
+
+                    // Afficher le bloc de message et masquer le formulaire immédiatement
+                    var successBlock = document.getElementById('success-message');
+                    if (successBlock) {
+                        var titleEl = successBlock.querySelector('.success-title');
+                        if (titleEl) { titleEl.textContent = 'Paiement en attente de validation'; }
+                        successBlock.style.display = 'block';
+                    }
+                    var headerEl = document.getElementById('payment_header');
+                    if (headerEl) { headerEl.style.display = 'none'; }
+                    form.style.display = 'none';
+
+                    // Forcer la soumission du formulaire (POST vers le contrôleur)
                     event.preventDefault();
                     form.submit();
                 }

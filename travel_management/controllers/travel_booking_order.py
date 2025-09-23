@@ -156,9 +156,10 @@ class TravelBookingOrderController(http.Controller):
                 orders = orders.browse(ids_list)
             except Exception:
                 orders = request.env['travel.order'].sudo()
-        
+        payment_methods = request.env['payment.method'].sudo().search([('active', '=', True)])
         values = {
             'orders': orders,
+            'payment_methods': payment_methods,
         }
         
         # Vous pouvez créer un template de confirmation séparé
@@ -167,5 +168,6 @@ class TravelBookingOrderController(http.Controller):
         # Ou rediriger vers une page existante avec un message de succès
         return request.render('travel_management.travel_booking_order', {
             'orders': orders,
-            'success_message': 'Paiement enregistré avec succès!'
+            'payment_methods': payment_methods,
+            'success_message': 'Paiement en attente de validation'
         })
