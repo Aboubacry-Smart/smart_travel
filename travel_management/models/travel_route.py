@@ -23,7 +23,29 @@ class TravelRoute(models.Model):
     travels_ids = fields.One2many('travel.order', 'route_id', string='Travels') 
     route_line_ids = fields.One2many("travel.route.line", "route_id", string="Lignes")
     route_line_count = fields.Integer(string="Nombre de lignes", compute="_compute_route_line_count")
+    product_id = fields.Many2one('product.product', string="Produit associé", readonly=True)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        routes = super().create(vals_list)
+        for route in routes:
+            # Création du produit lié à la route
+            product = self.env['product.product'].create({
+                'name': f"Billet {route.departure_point.name} → {route.arrival_point.name}",
+                'type': 'service',
+                'list_price': route.price,
+            })
+            route.product_id = product.id
+        return routes
+
+    def write(self, vals):
+        res = super().write(vals)
+        # Si le prix change, on met à jour le produit associé
+        for route in self:
+            if route.product_id and 'price' in vals:
+                route.product_id.list_price = vals['price']
+        return res
+        
     def _compute_route_line_count(self):
         for route in self:
             route.route_line_count = len(route.route_line_ids)

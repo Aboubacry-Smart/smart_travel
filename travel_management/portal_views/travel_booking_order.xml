@@ -252,7 +252,6 @@
 
                 .next-steps {
                     background: var(--blue-light);
-                    border: 2px solid var(--blue);
                     border-radius: var(--radius);
                     padding: 20px;
                     text-align: left;
@@ -567,6 +566,15 @@
                                             <li>Présentez-vous 15 minutes avant le départ</li>
                                             <li>Ayez votre code de réservation à portée de main</li>
                                         </ul>
+                                    </div>
+                                    <!-- Ligne 3 : Bouton -->
+                                    <div class="row mt-3">
+                                        <div class="col-12 text-center">
+                                            <button class="btn btn-primary travel-book-btn"
+                                                    >
+                                                Imprimer le reçu
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

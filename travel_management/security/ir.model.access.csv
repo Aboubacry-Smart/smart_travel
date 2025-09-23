@@ -5,3 +5,4 @@ travel_management.access_trip_package,access_trip_package,travel_management.mode
 travel_management.access_bus_agency,access_bus_agency,travel_management.model_bus_agency,base.group_user,1,1,1,1
 travel_management.access_travel_order,access_travel_order,travel_management.model_travel_order,base.group_user,1,1,1,1
 travel_management.access_travel_route_line,access_travel_route_line,travel_management.model_travel_route_line,base.group_user,1,1,1,1
+access_travel_route_manager,travel_route_manager,model_travel_route,,1,1,1,1

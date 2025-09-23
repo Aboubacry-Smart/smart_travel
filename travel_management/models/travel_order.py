@@ -10,7 +10,7 @@ import base64
 class TravelOrder(models.Model):
     _name = 'travel.order'
     _description = 'Travel Order' 
-    _inherit = ['mail.activity.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     route_id = fields.Many2one('travel.route', string='Route', required=True)
     route_line_id = fields.Many2one('travel.route.line', string='Route Line', help="Selected departure for this order")
@@ -26,13 +26,55 @@ class TravelOrder(models.Model):
         ('draft', 'Draft'), 
         ('confirm', 'Confirm'),
         ('expired', 'Expired')
-    ], default='draft')
+    ], default='draft', tracking=True)
     payment_date = fields.Datetime(string='Payment Date', readonly=True)
     paid_by_user_id = fields.Many2one('res.users', string='Paid by', readonly=True)
     code = fields.Char(string='Code', readonly=True, default=lambda self: ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)))
     qr_code = fields.Binary(string='QR Code', compute='_compute_qr_code')
     date = fields.Datetime(string='Date',)
-    
+    invoice_id = fields.Many2one('account.move', string="Invoice", readonly=True, copy=False, tracking=True)
+
+    def write(self, vals):
+        res = super().write(vals)
+
+        if 'state' in vals:
+            for order in self:
+                invoice = order.invoice_id
+                if invoice:
+                    new_state = vals['state']
+                    try:
+                        if new_state == 'draft':
+                            # Remettre la facture en brouillon
+                            if invoice.state != 'draft':
+                                invoice.button_draft()
+                                invoice.message_post(body=f"La réservation {order.code} est repassée en brouillon.")
+
+                        elif new_state == 'confirm':
+                            # Valider la facture si elle est en brouillon
+                            if invoice.state == 'draft':
+                                invoice.action_post()
+                                invoice.message_post(body=f"La réservation {order.code} a été confirmée et la facture validée.")
+
+                        elif new_state == 'expired':
+                            # Annuler la facture
+                            if invoice.state not in ['cancel']:
+                                invoice.button_cancel()
+                                invoice.message_post(body=f"La réservation {order.code} a expiré, facture annulée.")
+                    
+                    except Exception as e:
+                        # Log l'erreur sans bloquer le processus
+                        order.message_post(body=f"Erreur lors de la synchronisation avec la facture: {str(e)}")
+                        
+        return res
+
+    def action_view_invoice(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': self.invoice_id.id,
+        }
 
     @api.depends('code')
     def _compute_qr_code(self):
@@ -76,6 +118,47 @@ class TravelOrder(models.Model):
                             date_deadline=fields.Date.today(),
                         )
                     except Exception:
-                        # Fail safe: continue if a single activity cannot be scheduled
                         continue
+
+        # 🔥 Génération automatique de facture après création
+        for record in records:
+            record._create_invoice()
+
         return records
+
+
+    def _create_invoice(self):
+        """Créer une facture client automatiquement à partir de la réservation"""
+        for order in self:
+            if not order.passenger_id or not order.route_id:
+                continue
+
+            # Utiliser le produit associé à la route
+            product = order.route_id.product_id
+            if not product:
+                # fallback : créer un produit si la route n’en a pas
+                product = self.env['product.product'].create({
+                    'name': f"Billet {order.route_id.name or ''}",
+                    'type': 'service',
+                    'list_price': order.route_id.price or 0.0,
+                })
+                order.route_id.product_id = product.id  # lier le produit à la route
+
+            # Créer la facture
+            invoice_vals = {
+                'move_type': 'out_invoice',
+                'partner_id': order.passenger_id.id,
+                'invoice_origin': order.code,
+                'invoice_date': fields.Date.context_today(self),
+                'invoice_line_ids': [(0, 0, {
+                    'product_id': product.id,
+                    'name': f"Billet {order.route_id.name or ''}",
+                    'quantity': 1,
+                    'price_unit': order.route_id.price,
+                })]
+            }
+            invoice = self.env['account.move'].create(invoice_vals)
+
+            # Lier la facture à la réservation
+            order.invoice_id = invoice.id
+

@@ -127,7 +127,7 @@ class TravelBookingOrderController(http.Controller):
         # Mise à jour des commandes avec les informations de paiement
         for order in orders:
             order_vals = {
-                'state': 'confirm',  # Utilise 'confirm' au lieu de 'paid' selon votre modèle
+                'state': 'draft',  # Utilise 'confirm' au lieu de 'paid' selon votre modèle
                 'payment_method_id': payment_method.id,
             }
             
