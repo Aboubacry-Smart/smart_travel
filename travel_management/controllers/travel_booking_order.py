@@ -67,7 +67,7 @@ class TravelBookingOrderController(http.Controller):
                     created_order_ids.append(order.id)
                 else:
                     order.write({'origin': request.env['travel.order'].sudo().browse(created_order_ids[0]).code})
-                created_order_ids.append(order.id)
+                    created_order_ids.append(order.id)
 
             return request.redirect('/my/travel/order?ids=' + ','.join(map(str, created_order_ids)))
 
