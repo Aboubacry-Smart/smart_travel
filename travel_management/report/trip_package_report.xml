@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_trip_package_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <h2>Colis</h2>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Nom:</strong>
+                                <span t-esc="doc.name"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Code:</strong>
+                                <span t-esc="doc.code"/>
+                            </div>
+                        </div>
+                        <div class="mt16">
+                            <t t-if="doc.qr_code">
+                                <img t-att-src="'/web/image/trip.package/' + str(doc.id) + '/qr_code'" style="max-width:200px;"/>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+
+

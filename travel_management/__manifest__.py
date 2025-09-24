@@ -28,6 +28,8 @@ Long description of module's purpose
         'views/travel_route_views.xml',
         'views/travel_route_line_views.xml',
         'views/trip_package_views.xml',
+        'report/ir_action_report.xml',
+        'report/trip_package_report.xml',
         'views/bus_agency_views.xml',
         'portal_views/travel_menu.xml',
         'portal_views/travel_booking.xml',

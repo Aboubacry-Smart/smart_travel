@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_travel_trip_ticket" model="ir.actions.report">
+        <field name="name">Trip Package Report</field>
+        <field name="model">trip.package</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">travel_management.report_trip_package_document</field>
+        <field name="report_file">travel_management.report_trip_package_document</field>
+        <field name="print_report_name">'COLIS - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_trip_package"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

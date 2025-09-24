@@ -23,17 +23,24 @@
             <field name="model">trip.package</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button name="action_print_package" type="object" class="btn-primary" string="Imprimer le colis"/>
+                    </header>
                     <sheet>
                         <group>
                             <group>
                                 <field name="name"/>
-                                <field name="code"/>
+                                <field name="code" readonly="1"/>
                                 <field name="travel_route"/>
                             </group>
                             <group>
                                 <field name="driver_id"/>
                                 <field name="owner_id"/>
+                                <field name="state" widget="statusbar" statusbar_visible="pending,boarded,arrived"/>
                             </group>
+                        </group>
+                        <group string="QR Code">
+                            <field name="qr_code" widget="image" class="oe_avatar"/>
                         </group>
                     </sheet>
                 </form>
