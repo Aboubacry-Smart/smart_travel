@@ -16,5 +16,13 @@
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">100</field>
         </record>
-    </data>
+
+        <!-- Menu pour le suivi des colis -->
+        <record id="website_trip_package_menu" model="website.menu">
+            <field name="name">Suivre un colis</field>
+            <field name="url">/my/package</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">110</field>
+        </record>
+    </data> 
 </odoo>

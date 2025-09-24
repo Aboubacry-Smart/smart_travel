@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
 
-# class ./smartTravel/travelManagement(http.Controller):
-#     @http.route('/./smart_travel/travel_management/./smart_travel/travel_management', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
-
-#     @http.route('/./smart_travel/travel_management/./smart_travel/travel_management/objects', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('./smart_travel/travel_management.listing', {
-#             'root': '/./smart_travel/travel_management/./smart_travel/travel_management',
-#             'objects': http.request.env['./smart_travel/travel_management../smart_travel/travel_management'].search([]),
-#         })
-
-#     @http.route('/./smart_travel/travel_management/./smart_travel/travel_management/objects/<model("./smart_travel/travel_management../smart_travel/travel_management"):obj>', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('./smart_travel/travel_management.object', {
-#             'object': obj
-#         })
+class Travel(http.Controller):
+    @http.route(['/my/package/<string:code>'], type='http', auth='public', website=True, methods=['GET'])
+    def trip_package_public_view(self, code, **kwargs):
+        Package = request.env['trip.package'].sudo()
+        package = Package.search([('code', '=', code)], limit=1)
+        values = {
+            'found': bool(package),
+            'package': package,
+        }
+        return request.render('travel_management.trip_package_public_view', values)
 

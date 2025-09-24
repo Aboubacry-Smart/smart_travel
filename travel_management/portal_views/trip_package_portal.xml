@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="trip_package_view" name="Trip Package View">
+        <t t-call="website.layout">
+            <div class="container mt-5 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                            <div class="card-header bg-primary text-white text-center py-3">
+                                <h3 class="mb-0">Informations du colis</h3>
+                            </div>
+                            <div class="card-body p-4">
+                                <t t-if="not found">
+                                    <div class="alert alert-danger text-center">
+                                        Colis introuvable. Vérifiez le code et réessayez.
+                                    </div>
+                                </t>
+                                <t t-if="found">
+                                    <div class="mb-3 text-center">
+                                        <span class="text-muted d-block">Code du colis</span>
+                                        <div class="fs-3 fw-bold text-dark"><t t-esc="package.code"/></div>
+                                    </div>
+                                    <div class="border-top pt-3 mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="text-muted d-block">Nom</span>
+                                                <strong><t t-esc="package.name"/></strong>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted d-block">Propriétaire</span>
+                                                <strong><t t-esc="package.owner_id.name"/></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="border-top pt-3 mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="text-muted d-block">Chauffeur</span>
+                                                <strong><t t-esc="package.driver_id.name"/></strong>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted d-block">Trajet</span>
+                                                <strong><t t-esc="package.travel_route.display_name"/></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center border-top pt-3">
+                                        <span class="text-muted d-block">Statut</span>
+                                        <div class="mt-1">
+                                            <t t-if="package.state == 'pending'">
+                                                <span class="badge bg-warning text-dark px-3 py-2">En attente</span>
+                                            </t>
+                                            <t t-if="package.state == 'boarded'">
+                                                <span class="badge bg-info text-dark px-3 py-2">Embarqué</span>
+                                            </t>
+                                            <t t-if="package.state == 'arrived'">
+                                                <span class="badge bg-success px-3 py-2">Arrivé</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <t t-if="package.qr_code">
+                                            <img t-att-src="'/web/image/trip.package/' + str(package.id) + '/qr_code'" alt="QR Code" style="max-width:200px;"/>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="trip_package_search" name="Trip Package Search">
+        <t t-call="website.layout">
+            <style>
+                :root { --primary-color: #714B67; --primary-dark: #5a3c52; --white: #ffffff; --radius: 12px; --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+                .travel-booking-container { max-width: 900px; margin: 40px auto; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; }
+                .travel-header { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); padding: 40px 30px; text-align: center; color: var(--white); }
+                .travel-header h1 { margin: 0 0 8px 0; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+                .travel-header p { margin: 0; opacity: 0.9; font-size: 16px; }
+                .travel-form-section { padding: 40px 30px; }
+                .travel-input-group { display: flex; flex-direction: column; }
+                .travel-input-group label { font-size: 14px; font-weight: 500; margin-bottom: 8px; letter-spacing: 0.05em; }
+                .travel-input-group input { width: 100%; padding: 16px 17px; border: 2px solid #e5e7eb; border-radius: var(--radius); font-size: 16px; transition: all 0.2s ease; }
+                .travel-input-group input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.1); }
+                .travel-search-btn { padding: 16px 24px; background: var(--primary-color); color: var(--white); border: none; border-radius: var(--radius); font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; min-width: 120px; height: 58px; }
+                .travel-search-btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            </style>
+            <div class="container-fluid">
+                <div class="travel-booking-container">
+                    <div class="travel-header">
+                        <h1>Suivre un colis</h1>
+                        <p>Vérifiez le statut de votre colis</p>
+                    </div>
+                    <div class="travel-form-section">
+                        <form t-att-action="'/my/package/' + (code or '')" method="get">
+                            <div style="display: flex; gap: 20px; align-items: end;">
+                                <div class="travel-input-group" style="flex: 1;">
+                                    <label for="package_code">Code du colis</label>
+                                    <input type="text" name="code" id="package_code" t-att-value="code or ''" placeholder="Entrez le code du colis" required="required"/>
+                                </div>
+                                <button type="submit" class="travel-search-btn">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
+
+

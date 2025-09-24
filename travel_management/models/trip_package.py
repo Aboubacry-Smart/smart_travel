@@ -31,13 +31,16 @@ class TripPackage(models.Model):
             if record.code:
                 try:
                     import qrcode
+                    # Build absolute URL for public package page
+                    base_url = record.env['ir.config_parameter'].sudo().get_param('web.base.url') or ''
+                    package_url = f"{base_url}/my/package/{record.code}"
                     qr = qrcode.QRCode(
                         version=1,
                         error_correction=qrcode.constants.ERROR_CORRECT_L,
                         box_size=10,
                         border=4,
                     )
-                    qr.add_data(record.code)
+                    qr.add_data(package_url)
                     qr.make(fit=True)
                     img = qr.make_image(fill='black', back_color='white')
                     buffer = BytesIO()
